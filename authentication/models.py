@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 from django.db import models
-
+from django.conf import settings
 from django.utils import timezone
 
 # Clase base para los tipos de usuario
@@ -17,23 +17,25 @@ class AbstractUsuario(models.Model):
         ('deshabilitado', 'Deshabilitado'),
     )
 
-    nombre = models.CharField(max_length=30)
-    apellido = models.CharField(max_length=30)
-    correo = models.EmailField()
+# Extiende modelo de usuario por default con relacion uno-a-uno
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     rol = models.CharField(max_length=20, choices=ROLES_OPCIONES, default='dev')
     fechaRegistro = models.DateTimeField(default=timezone.now)
     estado = models.CharField(max_length=20, choices = STATUS_CHOICES, default = 'verificado')
-    #password = models.PasswordField()
+    horasTrabajo = models.TimeField(auto_now=False, auto_now_add=False)
+    ultimoUpdate = models.DateTimeField(auto_now=True)
 
 # Convierte esta clase en una abstracta
     class Meta: 
         abstract = True
     
 
-class ScrumMaster(models.Model):
-    pass 
+# Modelo para scrum master
+class ScrumMaster(AbstractUsuario):
+  pass
 
-class Desarrollador(models.Model):
-    pass 
+# Modelo para desarrollador
+class Desarrollador(AbstractUsuario):
+    pass
 
 

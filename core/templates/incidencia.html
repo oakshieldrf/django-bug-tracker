@@ -1,0 +1,379 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+			
+	<div class="content">
+		<div class="page-inner mt-3">
+            <div class="page-header mb-0">
+                <h4>#4598</h4>
+            </div>
+            <div class="page-header ">
+                <div class="input-group w-auto pr-3">
+                    <div class="input-group-append">
+                        <button class="btn btn-danger dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">P1</button>
+                        <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(169px, 43px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <a class="dropdown-item" href="#">P2</a>
+                            <a class="dropdown-item" href="#">P3</a>
+                            <a class="dropdown-item" href="#">P4</a>
+                            <a class="dropdown-item" href="#">P5</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column ">
+                    <small>Jun 9, 2021 5:12 PM (GMT-05:00</small>
+                    <h4 class="page-title">No se puede conectar a la base de datos</h4>
+                </div>
+                <div class="w-50 d-flex flex-row-reverse">
+                    <div class="input-group pl-3 w-auto">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Abierto</button>
+                            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(169px, 43px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                <a class="dropdown-item" href="#">Resuelto</a>
+                                <a class="dropdown-item" href="#">Cerrado</a>
+                                <a class="dropdown-item" href="#">Eliminado</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+						<div class="card-header">
+							<div class="d-flex align-items-center">
+								<h4 class="card-title">Lista de Incidencias</h4>
+							</div>
+						</div>
+						<div class="card-body">
+							<!-- Modal -->
+							<div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header no-bd">
+											<h5 class="modal-title">
+												<span class="fw-mediumbold">
+												Crear</span> 
+												<span class="fw-light">
+													Incidencia
+												</span>
+											</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">×</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<p class="small">Genera una incidencia nueva llenando los datos del formulario</p>
+											<form>
+												<div class="row">
+													<div class="col-sm-9 pr-0">
+														<div class="form-group form-group-default">
+															<label> Título</label>
+															<input id="addName" type="text" class="form-control" placeholder="Introduce el titulo de la incidencia">
+														</div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+														<div class="form-group form-group-default p-0">                 
+                                                            <div class="input-group">
+                                                                <div class="input-group-append">
+                                                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Grado</button>
+                                                                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(55px, 43px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                                                        <a class="dropdown-item" href="#">P1</a>
+                                                                        <a class="dropdown-item" href="#">P2</a>
+                                                                        <a class="dropdown-item" href="#">P3</a>
+                                                                        <a class="dropdown-item" href="#">P4</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+														</div>
+                                                    </div>
+                                                    <div class="col-md-12">
+														<div class="form-group form-group-default">
+															<label>Descripción</label>
+															<input id="addDescripcion" type="textarea" aria-rowspan="5" class="form-control" placeholder="Describe cual es y como se genero el bug/incidencia">
+														</div>
+													</div>
+													<div class="col-md-4 pr-1">
+														<div class="form-group form-group-default p-0">                 
+                                                            <div class="input-group">
+                                                                <div class="input-group-append">
+                                                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Equipo</button>
+                                                                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(55px, 43px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                                                        <a class="dropdown-item" href="#">Equipo 1</a>
+                                                                        <a class="dropdown-item" href="#">Equipo 2</a>
+                                                                        <a class="dropdown-item" href="#">Equipo 3</a>
+                                                                        <a class="dropdown-item" href="#">Equipo 4</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+														</div>
+													</div>
+                                                    <div class="col-md-4 pr-1">
+														<div class="form-group form-group-default p-0">                 
+                                                            <div class="input-group">
+                                                                <div class="input-group-append">
+                                                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tipo</button>
+                                                                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(55px, 43px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                                                        <a class="dropdown-item" href="#">Incidencia</a>
+                                                                        <a class="dropdown-item" href="#">Mejora</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+														</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+														<div class="form-group form-group-default p-0">                 
+                                                            <div class="input-group">
+                                                                <div class="input-group-append">
+                                                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Responsables</button>
+                                                                    <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(55px, 43px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                                                        <a class="dropdown-item" href="#">Responsable 1</a>
+                                                                        <a class="dropdown-item" href="#">Responsable 2</a>
+                                                                        <a class="dropdown-item" href="#">Responsable 3</a>
+                                                                        <a class="dropdown-item" href="#">Responsable 4</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+														</div>
+													</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="form-group form-group-default">
+															<label> Horas estimadas:</label>
+															<input id="addHoras" type="time" class="form-control" >
+														</div>
+                                                    </div>
+                                                </div>
+											</form>
+										</div>
+										<div class="modal-footer no-bd">
+											<button type="button" id="addRowButton" class="btn btn-primary">Crear</button>
+											<button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <p>Responsables</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <a href="">Ramiro</a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <p>Equipo</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <a href="">Equipo-1</a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <p>Última actualización</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p>Jun 10, 2021 4:09 PM (GMT-05:00)</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <p>Descripción</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p>Texto de la descripcion de incidencia aqui.</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <p>Grado</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p>P1 - Alto</p>
+                                </div>
+                            </div>
+						</div>
+					</div>
+                </div>
+            </div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+	<!-- Atlantis DEMO methods, don't include it in your project! -->
+<!--<script src="/static/assets/js/setting-demo.js"></script> -->
+<!--<script src="/static/assets/js/demo.js"></script> -->
+<script src="/static/assets/js/setting-demo2.js"></script>
+	<script>
+		Circles.create({
+			id:'circles-1',
+			radius:45,
+			value:60,
+			maxValue:100,
+			width:7,
+			text: 5,
+			colors:['#f1f1f1', '#FF9E27'],
+			duration:400,
+			wrpClass:'circles-wrp',
+			textClass:'circles-text',
+			styleWrapper:true,
+			styleText:true
+		})
+
+		Circles.create({
+			id:'circles-2',
+			radius:45,
+			value:70,
+			maxValue:100,
+			width:7,
+			text: 36,
+			colors:['#f1f1f1', '#2BB930'],
+			duration:400,
+			wrpClass:'circles-wrp',
+			textClass:'circles-text',
+			styleWrapper:true,
+			styleText:true
+		})
+
+		Circles.create({
+			id:'circles-3',
+			radius:45,
+			value:40,
+			maxValue:100,
+			width:7,
+			text: 12,
+			colors:['#f1f1f1', '#F25961'],
+			duration:400,
+			wrpClass:'circles-wrp',
+			textClass:'circles-text',
+			styleWrapper:true,
+			styleText:true
+		})
+
+		Circles.create({
+			id:'circles-4',
+			radius:45,
+			value:70,
+			maxValue:100,
+			width:7,
+			text: 20,
+			colors:['#f1f1f1', '#2BB930'],
+			duration:400,
+			wrpClass:'circles-wrp',
+			textClass:'circles-text',
+			styleWrapper:true,
+			styleText:true
+		})
+
+
+		$('#lineChart').sparkline([105,103,123,100,95,105,115], {
+			type: 'line',
+			height: '70',
+			width: '100%',
+			lineWidth: '2',
+			lineColor: '#ffa534',
+			fillColor: 'rgba(255, 165, 52, .14)'
+		});
+
+	//CODIGO PROPIO PARA GRAFICAS
+
+		var lineChart = document.getElementById('lineChart').getContext('2d'),
+		//barChart = document.getElementById('barChart').getContext('2d'),
+		pieChart = document.getElementById('pieChart').getContext('2d');
+
+		var myLineChart = new Chart(lineChart, {
+			type: 'line',
+			data: {
+				labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+				datasets: [{
+					label: "Active Users",
+					borderColor: "#1d7af3",
+					pointBorderColor: "#FFF",
+					pointBackgroundColor: "#1d7af3",
+					pointBorderWidth: 2,
+					pointHoverRadius: 4,
+					pointHoverBorderWidth: 1,
+					pointRadius: 4,
+					backgroundColor: 'transparent',
+					fill: true,
+					borderWidth: 2,
+					data: [542, 480, 430, 550, 530, 453, 380, 434, 568, 610, 700, 900]
+				}]
+			},
+			options : {
+				responsive: true, 
+				maintainAspectRatio: false,
+				legend: {
+					position: 'bottom',
+					labels : {
+						padding: 10,
+						fontColor: '#1d7af3',
+					}
+				},
+				tooltips: {
+					bodySpacing: 4,
+					mode:"nearest",
+					intersect: 0,
+					position:"nearest",
+					xPadding:10,
+					yPadding:10,
+					caretPadding:10
+				},
+				layout:{
+					padding:{left:15,right:15,top:15,bottom:15}
+				}
+			}
+		});
+		var myPieChart = new Chart(pieChart, {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [50, 35, 15],
+					backgroundColor :["#1d7af3","#f3545d","#fdaf4b"],
+					borderWidth: 0
+				}],
+				labels: ['New Visitors', 'Subscribers', 'Active Users'] 
+			},
+			options : {
+				responsive: true, 
+				maintainAspectRatio: false,
+				legend: {
+					position : 'bottom',
+					labels : {
+						fontColor: 'rgb(154, 154, 154)',
+						fontSize: 11,
+						usePointStyle : true,
+						padding: 20
+					}
+				},
+				pieceLabel: {
+					render: 'percentage',
+					fontColor: 'white',
+					fontSize: 14,
+				},
+				tooltips: false,
+				layout: {
+					padding: {
+						left: 20,
+						right: 20,
+						top: 20,
+						bottom: 20
+					}
+				}
+			}
+		})
+
+	</script>
+
+{% endblock javascripts %}

@@ -35,6 +35,26 @@
 								</ul>
 							</div>
 						</div>
+						<!-- Opciones para pagina Incidencias -->
+						{% if request.path == '/incidencias.html' %}
+						<div class="filters-estado mt-4">
+							<h6>Filtrar por estado</h6>
+							<ul class="nav">
+								<li class="nav-item">
+									<a href="#">Todo</a>
+								</li>
+								<li class="nav-item">
+									<a href="#">Abierto</a>
+								</li>
+								<li class="nav-item">
+									<a href="#">Cerrado</a>
+								</li>
+								<li class="nav-item">
+									<a href="#">Resuelto</a>
+								</li>
+							</ul>
+						</div>
+						{% endif %}
 					</div>
 					<ul class="nav nav-primary">
 
