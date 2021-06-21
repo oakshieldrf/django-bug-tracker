@@ -1,0 +1,334 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+			
+	<div class="content">
+		<div class="page-inner mt-3">
+		<form method="post">
+			{% csrf_token %}
+            <div class="page-header mb-0">
+                <h4>ID: {{incidencia.id}}</h4>
+            </div>
+            <div class="page-header ">
+				<div class="form-group p-0 mt-4">                 
+					<div class="input-group">
+						<select class="form-control btn btn-danger dropdown-toggle mr-2" id="grado" name="grado">
+							<option class="dropdown-item" value="{{incidencia.grado}}">{{incidencia.grado}}</option>
+							{% for key, value in grado %}
+								{% if key != incidencia.grado %}
+									<option class="dropdown-item" value="{{key}}" >{{key}} - {{value}}</option>
+								{% endif %}
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+                <div class="d-flex flex-column ">
+                    <small>{{incidencia.fechaCreacion}}</small>
+					<div class="form-group form-floating-label">
+						<input id="inputFloatingLabel" type="text" class="form-control input-border-bottom" style="font-size:1.8rem;" required="" value="{{incidencia.titulo}}" name="nombre" id="nombre">
+						<label for="inputFloatingLabel" class="placeholder"></label>
+					</div>
+                </div>
+                <div class="w-50 d-flex flex-row-reverse">
+					<div class="form-group p-0">                 
+						<div class="input-group">
+							<select class="form-control btn btn-primary dropdown-toggle" id="estado" name="estado">
+								<option class="dropdown-item" value="{{incidencia.estado}}">{{incidencia.estado|capfirst}} </option>
+							{% with incidencia.ESTADO_CHOICES  as choices%}
+								{% for key, value in choices %}
+									{% if key != incidencia.estado %}
+									<option class="dropdown-item" value="{{key}}">{{value}}</option>
+									{% endif %}
+								{% endfor %}
+							{% endwith %}												
+							</select>
+						</div>
+					</div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+						<div class="card-header">
+							<div class="d-flex align-items-center">
+								<h4 class="card-title"> Detalles de la incidencia </h4>
+							</div>
+						</div>
+						<div class="card-body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <p>Responsables</p>
+                                </div>
+                                <div class="col-sm-4 col-lg-2">
+									<a href="#">{{incidencia.responsables}}</a>
+								</div>
+								<div class="col-sm-6 col-lg-3">
+									<div class="form-group p-0 w-auto">                 
+										<div class="input-group">
+											<select class="form-control btn btn-primary dropdown-toggle" id="responsables" name="responsables">
+												<option class="dropdown-item"  value="{{incidencia.responsables.id}}">Cambiar responsables </option>
+												{% for miembro in responsables %}
+													<option class="dropdown-item" value="{{miembro.id}}" >{{miembro.username}} </option>
+												{% endfor %}
+											</select>
+										</div>
+									</div>
+								</div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-2">
+                                    <p>Equipo</p>
+                                </div>
+                                <div class="col-sm-4 col-lg-2">
+									<a href="#">{{incidencia.equipo}}</a>
+								</div>
+								<div class="col-sm-6 col-lg-3">
+									<div class="form-group p-0 w-auto">                 
+										<div class="input-group">
+											<select class="form-control btn btn-primary dropdown-toggle" id="equipo" name="equipo">
+												<option class="dropdown-item" value="{{incidencia.equipo.id}}">Cambiar equipo</option>
+												{% for equipo in equipos %}
+													<option class="dropdown-item" value="{{equipo.id}}" >{{equipo.nombre}} </option>
+												{% endfor %}
+											</select>
+										</div>
+									</div>
+								</div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-2">
+                                    <p>Última actualización</p>
+                                </div>
+                                <div class="col-md-8">
+                                    <p class="font-weight-bold">{{incidencia.fechaModificacion}}</p>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-2">
+                                    <p>Descripción</p>
+                                </div>
+                                <div class="col-md-8">
+									<div class="form-group form-floating-label  pl-md-0">
+										<textarea type="textarea" class="form-control" id="descripcion" name="descripcion" required rows="5">{{incidencia.descripcion}}</textarea>
+									</div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-2">
+                                    <p>Grado</p>
+                                </div>
+                                <div class="col-md-8">
+									<p class="font-weight-bold">{{incidencia.grado}}</p>
+                                </div>
+							</div>
+							<div class="row mt-2">
+								<div class="col-md-2">
+									<p>Tipo</p>
+								</div>
+								<div class="col-sm-4 col-lg-2 pr-1">
+									<p  class="font-weight-bold">{{incidencia.tipo}} </p>
+								</div>
+								<div class="col-sm-6 col-lg-3">
+									<div class="form-group p-0">                 
+										<div class="input-group">
+											<select class="form-control btn btn-primary dropdown-toggle" id="tipo" name="tipo">
+												<option class="dropdown-item" value="{{incidencia.tipo}}">Cambiar tipo</option>
+												{% for key, value in incidencia.TIPO_REQUEST  %}
+													{% if key != incidencia.tipo %}
+														<option class="dropdown-item" value="{{key}}" >{{value}} </option>	
+													{% endif %}
+												{% endfor %}										
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row mt-5 mb-5">
+								<div class="col-12">
+									<button class="btn btn-success" type="submit">Actualizar datos</button>
+								</div>
+							</div>
+						</div>
+					</div>
+                </div>
+			</div>
+		</form>	
+		</div>
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+	<!-- Atlantis DEMO methods, don't include it in your project! -->
+<!--<script src="/static/assets/js/setting-demo.js"></script> -->
+<!--<script src="/static/assets/js/demo.js"></script> -->
+<script src="/static/assets/js/setting-demo2.js"></script>
+	<script>
+		Circles.create({
+			id:'circles-1',
+			radius:45,
+			value:60,
+			maxValue:100,
+			width:7,
+			text: 5,
+			colors:['#f1f1f1', '#FF9E27'],
+			duration:400,
+			wrpClass:'circles-wrp',
+			textClass:'circles-text',
+			styleWrapper:true,
+			styleText:true
+		})
+
+		Circles.create({
+			id:'circles-2',
+			radius:45,
+			value:70,
+			maxValue:100,
+			width:7,
+			text: 36,
+			colors:['#f1f1f1', '#2BB930'],
+			duration:400,
+			wrpClass:'circles-wrp',
+			textClass:'circles-text',
+			styleWrapper:true,
+			styleText:true
+		})
+
+		Circles.create({
+			id:'circles-3',
+			radius:45,
+			value:40,
+			maxValue:100,
+			width:7,
+			text: 12,
+			colors:['#f1f1f1', '#F25961'],
+			duration:400,
+			wrpClass:'circles-wrp',
+			textClass:'circles-text',
+			styleWrapper:true,
+			styleText:true
+		})
+
+		Circles.create({
+			id:'circles-4',
+			radius:45,
+			value:70,
+			maxValue:100,
+			width:7,
+			text: 20,
+			colors:['#f1f1f1', '#2BB930'],
+			duration:400,
+			wrpClass:'circles-wrp',
+			textClass:'circles-text',
+			styleWrapper:true,
+			styleText:true
+		})
+
+
+		$('#lineChart').sparkline([105,103,123,100,95,105,115], {
+			type: 'line',
+			height: '70',
+			width: '100%',
+			lineWidth: '2',
+			lineColor: '#ffa534',
+			fillColor: 'rgba(255, 165, 52, .14)'
+		});
+
+	//CODIGO PROPIO PARA GRAFICAS
+
+		var lineChart = document.getElementById('lineChart').getContext('2d'),
+		//barChart = document.getElementById('barChart').getContext('2d'),
+		pieChart = document.getElementById('pieChart').getContext('2d');
+
+		var myLineChart = new Chart(lineChart, {
+			type: 'line',
+			data: {
+				labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+				datasets: [{
+					label: "Active Users",
+					borderColor: "#1d7af3",
+					pointBorderColor: "#FFF",
+					pointBackgroundColor: "#1d7af3",
+					pointBorderWidth: 2,
+					pointHoverRadius: 4,
+					pointHoverBorderWidth: 1,
+					pointRadius: 4,
+					backgroundColor: 'transparent',
+					fill: true,
+					borderWidth: 2,
+					data: [542, 480, 430, 550, 530, 453, 380, 434, 568, 610, 700, 900]
+				}]
+			},
+			options : {
+				responsive: true, 
+				maintainAspectRatio: false,
+				legend: {
+					position: 'bottom',
+					labels : {
+						padding: 10,
+						fontColor: '#1d7af3',
+					}
+				},
+				tooltips: {
+					bodySpacing: 4,
+					mode:"nearest",
+					intersect: 0,
+					position:"nearest",
+					xPadding:10,
+					yPadding:10,
+					caretPadding:10
+				},
+				layout:{
+					padding:{left:15,right:15,top:15,bottom:15}
+				}
+			}
+		});
+		var myPieChart = new Chart(pieChart, {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [50, 35, 15],
+					backgroundColor :["#1d7af3","#f3545d","#fdaf4b"],
+					borderWidth: 0
+				}],
+				labels: ['New Visitors', 'Subscribers', 'Active Users'] 
+			},
+			options : {
+				responsive: true, 
+				maintainAspectRatio: false,
+				legend: {
+					position : 'bottom',
+					labels : {
+						fontColor: 'rgb(154, 154, 154)',
+						fontSize: 11,
+						usePointStyle : true,
+						padding: 20
+					}
+				},
+				pieceLabel: {
+					render: 'percentage',
+					fontColor: 'white',
+					fontSize: 14,
+				},
+				tooltips: false,
+				layout: {
+					padding: {
+						left: 20,
+						right: 20,
+						top: 20,
+						bottom: 20
+					}
+				}
+			}
+		})
+
+	</script>
+
+{% endblock javascripts %}

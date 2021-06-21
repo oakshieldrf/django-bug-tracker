@@ -4,6 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 
 
@@ -16,6 +17,8 @@ class Equipo(models.Model):
     #proyectos = models
     descripcion = models.TextField(max_length=200)
     horasTrabajo = models.TimeField(auto_now=False, auto_now_add=False)
+
+
 
 
 #Modelo para incidencias
@@ -41,18 +44,14 @@ class Incidencia(models.Model):
         ("eliminado","Eliminado"),
     ) 
 
-    tituloIncidente = models.CharField(max_length=200)
-    tipoSolicitud = models.CharField(choices=TIPO_REQUEST,  max_length=20, default = 'incidencia')
+    titulo = models.CharField(max_length=200)
+    tipo = models.CharField(choices=TIPO_REQUEST,  max_length=20, default = 'incidencia')
     descripcion = models.TextField(max_length=1000)
     autor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sistema_incidencia')
     fechaCreacion = models.DateTimeField(auto_now_add = timezone.now() )
     fechaModificacion = models.DateTimeField(auto_now=True)
     estado = models.CharField(choices = ESTADO_CHOICES, max_length=20, default = "abierto")
-    responsable = models.ForeignKey(User, on_delete=models.CASCADE,  related_name="incidencia_responsables")
+    responsables = models.ForeignKey(User, on_delete=models.CASCADE,  related_name="incidencia_responsables")
     equipo = models.ForeignKey(Equipo, on_delete=models.CASCADE, related_name='equipo_incidencias', default=None ) 
-    severidad = models.CharField(max_length=20, choices = GRADO_CHOICES, default='P5')
+    grado = models.CharField(max_length=20, choices = GRADO_CHOICES, default='P5')
     horasEstimadas = models.TimeField(auto_now=False, auto_now_add=False)
-
-    # Crear inicidencia 
-    
-    # 

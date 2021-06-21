@@ -10,7 +10,7 @@
 	<div class="content">
 		<div class="page-inner mt--5">
             <div class="page-header mt-5">
-                <h4 class="page-title">Incidencias</h4>
+                <h4 class="page-title">Equipos</h4>
                 <ul class="breadcrumbs">
                     <li class="nav-home">
                         <a href="#">
@@ -21,12 +21,12 @@
                         <i class="flaticon-right-arrow"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Incidencias</a>
+                        <a href="#">Equipos</a>
 					</li>
 					
 					{% if messages %}
 						{% for message in messages %}
-							<li class="text-{{message.tags}} ml-4" style="font-size:2rem!importat; "><h5>{{message}}</h5></li>
+							<li class="text-{{message.tags}} ml-4" style="font-size:2rem!important; "><h5>{{message}}</h5></li>
 						{% endfor %}
 					{% endif %}
 
@@ -38,10 +38,10 @@
                     <div class="card">
 						<div class="card-header">
 							<div class="d-flex align-items-center">
-								<h4 class="card-title">Lista de Incidencias</h4>
+								<h4 class="card-title">Lista de Equipos</h4>
 								<button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
 									<i class="fa fa-plus"></i>
-									Crear
+									Nuevo
 								</button>
 							</div>
 						</div>
@@ -49,93 +49,46 @@
 		<!--------------- Modal para crear una incidencia  ---------------->
 							<div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" style="display: none;" aria-hidden="true">
 								<div class="modal-dialog" role="document">
-									<div class="modal-content">
+									<div class="modal-content" style="background-color:#202940;">
 										<div class="modal-header no-bd">
 											<h5 class="modal-title">
-												<span class="fw-mediumbold">
-												Crear</span> 
-												<span class="fw-light">
-													Incidencia
-												</span>
+												<span class="text-white font-weight-bold">
+												Crear equipo
+												</span> 
 											</h5>
 											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 												<span aria-hidden="true">×</span>
 											</button>
 										</div>
 										<div class="modal-body">
-											<p class="small">Genera una incidencia nueva llenando los datos del formulario</p>
+											<p class="small text-white mb-5">Crea un equipo llenando los datos del formulario</p>
 											<form method="post">
 												{%csrf_token%}
 												<div class="row">
-													<div class="col-sm-9 pr-0">
+													<div class="col-sm-12 ">
 														<div class="form-group form-group-default">
-															<label> Título</label>
-															<input id="nombre" type="text" name="nombre" class="form-control" placeholder="Introduce el titulo de la incidencia">
+															<label>nombre</label>
+															<input id="nombre" type="text" name="nombre" class="form-control" placeholder="Introduce el nombre del equipo">
 														</div>
                                                     </div>
-                                                    <div class="col-sm-3">
-														<div class="form-group p-0">                 
-                                                            <div class="input-group">
-																<select class="form-control btn btn-primary dropdown-toggle" id="grado" name="grado">
-																	<option class="dropdown-item" selected="selected" disabled>Grado</option>
-																	<option class="dropdown-item" value="P1" >P1 - Crítico</option>
-																	<option class="dropdown-item" value="P2">P2 - Alto</option>
-																	<option class="dropdown-item" value="P3">P3 - Moderado</option>
-																	<option class="dropdown-item" value="P4">P4 - Bajo</option>
-																	<option class="dropdown-item" value="P5">P5 - Informativo</option>
-																</select>
-                                                            </div>
-														</div>
-                                                    </div>
+
                                                    <div class="col-md-12">
 														<div class="form-group form-group-default ">
 															<label>Descripción</label>
-															<input id="descripcion" name="descripcion" type="textarea" aria-rowspan="5" class="form-control" placeholder="Describe cual es y como se genero el bug/incidencia">
-														</div>
-													</div>
-													<div class="col-md-4 pr-1">
-														<div class="form-group p-0">                 
-                                                            <div class="input-group">
-																<select class="form-control btn btn-primary dropdown-toggle" id="equipo" name="equipo">
-																	<option class="dropdown-item" selected="selected" disabled>Equipo</option>
-																	{% for equipo in equipos %}
-																		<option class="dropdown-item" value="{{equipo.id}}" >{{equipo.nombre}}</option>
-																	{% endfor %}
-																</select>
-                                                            </div>
-														</div>
-													</div>
-                                                    <div class="col-md-4 pr-1">
-														<div class="form-group p-0">                 
-                                                            <div class="input-group">
-																<select class="form-control btn btn-primary dropdown-toggle" id="tipo" name="tipo">
-																	<option class="dropdown-item" selected="selected" disabled>Tipo</option>
-																	<option class="dropdown-item" value="incidencia" >Incidencia</option>
-																	<option class="dropdown-item" value="mejora" >Mejora</option>												
-																</select>
-                                                            </div>
-														</div>
-                                                    </div>
-                                                    <div class="col-md-4">
-														<div class="form-group p-0">                 
-                                                            <div class="input-group">
-																<select class="form-control btn btn-primary dropdown-toggle" id="responsables" name="responsables">
-																	<option class="dropdown-item" selected="selected" disabled>Responsables</option>
-																	{% for miembro in responsables %}
-																		<option class="dropdown-item" value="{{miembro.id}}" >{{miembro.username}} </option>
-																	{% endfor %}
-																</select>
-                                                            </div>
+															<input id="descripcion" name="descripcion" type="textarea" aria-rowspan="5" class="form-control" placeholder="Describe en que consiste, las funciones y el alcance del equipo">
 														</div>
 													</div>
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-sm-12 mt-4">
-                                                        <div class="form-group">
-															<label> Horas estimadas:</label>
-															<input id="horas" name="horas" type="time" class="form-control" >
+                                                <div class="row mt-3">
+													<div class="col-sm-4">
+														<div class="form-group p-0">                 
+															<div class="input-group">
+																<select class="form-control btn btn-primary dropdown-toggle" id="grado" name="grado">
+																	<option class="dropdown-item" selected="selected" disabled>Miembros</option>
+																</select>
+															</div>
 														</div>
-                                                    </div>
+													</div>										
                                                 </div> 
 										
 										</div>
@@ -151,46 +104,54 @@
 							<div class=" table-responsive table-hover">
 								<div id="add-row_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4"><div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="add-row_length"><label>Mostrar <select name="add-row_length" aria-controls="add-row" class="form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> elementos</label></div></div><div class="col-sm-12 col-md-6"><div id="add-row_filter" class="dataTables_filter"><label>Buscar:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="add-row"></label></div></div></div><div class="row"><div class="col-sm-12"><table id="add-row" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="add-row_info">
 									<thead>
-										<tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" style="width:8%;" aria-label="Name: activate to sort column descending" aria-sort="ascending">Grado</th><th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" style="width:60%;" aria-label="Posicion: activate to sort column ascending">Position</th><th style="width:30%" class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">Acciones</th></tr>
+										<tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" style="width:8%;" aria-label="Name: activate to sort column descending" aria-sort="ascending">Grado</th><th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" style="width:60%;" aria-label="Posicion: activate to sort column ascending">Posición</th><th style="width:30%" class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">Acciones</th></tr>
 									</thead>
 									<tbody>	
-										{% for incidencia in lista_incidentes%}
+										{% for equipo in lista_equipos%}
 											<tr role="row">
 												<td class="sorting_1">
 													<div class="mb-3">
-														<small>ID: <span>{{incidencia.id}}</span></small> 
+														<small>ID: <span>{{equipo.id}}</span></small> 
 													</div>
-													<label class="colorinput">
-														<input name="color"  value="primary" data-toggle="tooltip" data-original-title="Estado" class="colorinput-input">
-														<span class="stamp stamp-md bg-danger mr-3">
-															{{incidencia.grado}}
-														</span>
-													</label>
-												</td>
-												<td>
-													<p>{{incidencia.titulo}}</p>
-													<p> <i class="fas fa-users"></i> <span> {{incidencia.equipo.nombre}}</span> </p>
-												</td>
+			
+                                                </td>
+                                                <td>
+                                                    <p>{{equipo.nombre}} </p>
+                                                </td>
 												<td>
 													<div class="form-button-action pt-3">
-														<label class="colorinput">
-															<input name="color"  value="primary" data-toggle="tooltip" data-original-title="Estado" class="colorinput-input">
-															<span class="stamp stamp-md bg-danger mr-3">
-																{{incidencia.estado|capfirst}}
-															</span>
-														</label>
-														<a href="/incidencia/{{incidencia.id}}" type="button" data-toggle="tooltip" title="" class="btn  btn-primary btn-sm" data-original-title="Ver incidencia">
+														<a href="{% url 'app:equipo_detalle' equipo.id %} " type="button" data-toggle="tooltip" title="" class="btn  btn-primary btn-sm" data-original-title="Ver equipo">
 															<i class="far fa-eye"></i>
 														</a>
 													</div>
 													<div class="mt-2">
-														<p><small>{{incidencia.fechaCreacion}} </small></p> 
+                                                        <p>Total horas trabajo: <small>{{equipo.horasTrabajo}} </small> </p>
+														
 													</div>
 												</td>
 										</tr>
 										{% endfor %}
                                     </tbody>
-								</table></div></div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="add-row_info" role="status" aria-live="polite">Mostrando 1 - 5 de 20 elementos</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="add-row_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="add-row_previous"><a href="#" aria-controls="add-row" data-dt-idx="0" tabindex="0" class="page-link">Anterior</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="add-row" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="add-row" data-dt-idx="2" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="add-row" data-dt-idx="3" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item next" id="add-row_next"><a href="#" aria-controls="add-row" data-dt-idx="4" tabindex="0" class="page-link">Siguiente</a></li></ul></div></div></div></div>
+                                </table></div></div>
+                                <div class="row mt-3">
+                                    <div class="col-sm-12 col-md-5">
+                                        <div class="dataTables_info" id="add-row_info" role="status" aria-live="polite">Mostrando 1 - 5 de 20 elementos</div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-7">
+                                        <div class="dataTables_paginate paging_simple_numbers" id="add-row_paginate">
+                                            <ul class="pagination">
+                                                <li class="paginate_button page-item previous disabled" id="add-row_previous">
+                                                    <a href="#" aria-controls="add-row" data-dt-idx="0" tabindex="0" class="page-link">Anterior</a>
+                                                </li>
+                                                <li class="paginate_button page-item active"><a href="#" aria-controls="add-row" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
+                                                <li class="paginate_button page-item "><a href="#" aria-controls="add-row" data-dt-idx="2" tabindex="0" class="page-link">2</a></li>
+                                                <li class="paginate_button page-item "><a href="#" aria-controls="add-row" data-dt-idx="3" tabindex="0" class="page-link">3</a></li>
+                                                <li class="paginate_button page-item next" id="add-row_next"><a href="#" aria-controls="add-row" data-dt-idx="4" tabindex="0" class="page-link">Siguiente</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 							</div>
 						</div>
 					</div>

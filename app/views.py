@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import loader
 from django.http import HttpResponse
@@ -43,28 +44,30 @@ def pages(request):
 
 
 
-## Vista para pagina de Incidencias
-'''@login_required(login_url="/login/")
-def incidenciasView(request):
-    context = {}
-    load_template      = request.path.split('/')[-1]
-    context['segment'] = load_template
-    html_template = loader.get_template( 'incidencias.html' )
+############ Vista para pagina de Incidencias ##########
 
-    return HttpResponse(html_template.render(context, request))
-'''
-
-#@login_required(login_url="/login/")
 class IncidenciasView(View):
 
     def get(self, request):
+
+        listaIncidencias = Incidencia.objects.all()
+        equipos = Equipo.objects.all()
+        responsables = User.objects.all()
+        for user in responsables: 
+            print(user.first_name)
+        print(listaIncidencias)
+
         context = {}
         context['segment'] = 'index'
+        context['lista_incidentes'] = listaIncidencias #Agrega lista de incidentes al contexto para mostrar en template
+        context['equipos'] = equipos
+        context['responsables'] = responsables
 
-        html_template = loader.get_template( 'incidencias.html' )
+        html_template = loader.get_template( 'incidencias.html')
         return HttpResponse(html_template.render(context, request))
+
        
-#Crea una incidencia
+### Crea una incidencia
     def post(self, request): 
         form = IncidenciaForm(request.POST)
 
@@ -82,12 +85,12 @@ class IncidenciasView(View):
 
         # Crea objeto nuevo Incidencia pero no lo guarda aun 
             incidencia = Incidencia()
-            incidencia.tituloIncidente = cd['nombre']
-            incidencia.tipoSolicitud = cd['tipo']
+            incidencia.titulo = cd['nombre']
+            incidencia.tipo = cd['tipo']
             incidencia.descripcion = cd['descripcion']
             incidencia.autor = request.user
-            incidencia.responsable = request.user
-            incidencia.severidad = cd['grado']
+            incidencia.responsables = request.user
+            incidencia.grado = cd['grado']
             incidencia.horasEstimadas = cd['horas']
             incidencia.equipo = equipo
 
@@ -102,10 +105,113 @@ class IncidenciasView(View):
    
             return redirect('incidencias_list')
 
-        
         context = {}
         context['segment'] = 'index'
 
         html_template = loader.get_template( 'incidencias.html' )
         return HttpResponse(html_template.render(context, request))
-          
+
+
+########## Clase para detalles una incidencia ###########
+
+class IncidenciaDetalleView(View): 
+
+    def get(self, request, id):
+
+        incidencia = Incidencia.objects.get(pk=id)
+        equipos = Equipo.objects.filter().exclude(id=incidencia.equipo.id)
+        responsables = User.objects.filter().exclude(id=incidencia.responsables.id)
+        grado = Incidencia.GRADO_CHOICES
+
+        print(incidencia)
+        context = {}
+        context['segment'] = 'index'
+        context['incidencia'] = incidencia
+        context['equipos'] = equipos
+        context['responsables'] = responsables
+        context['grado'] = grado 
+ 
+
+        html_template = loader.get_template( 'incidencia-detalle.html' )
+        return HttpResponse(html_template.render(context, request))
+       
+### Modifica detalles de incidencia
+    def post(self, request, id): 
+
+        incidencia = Incidencia.objects.get(pk=id)
+        dataUpdate = request.POST
+        print(dataUpdate)
+
+        incidencia.grado = dataUpdate['grado'] 
+        incidencia.titulo = dataUpdate['nombre']
+        incidencia.estado = dataUpdate['estado']
+        userresponsable = User.objects.get(pk=dataUpdate['responsables'])
+        incidencia.responsables = userresponsable
+        equiporeponsable = Equipo.objects.get(pk=dataUpdate['equipo'])
+        incidencia.equipo = equiporeponsable
+        incidencia.descripcion = dataUpdate['descripcion']
+        incidencia.tipo = dataUpdate['tipo']
+        incidencia.fechaModificacion = timezone.now()
+
+        incidencia.save()
+
+
+        return self.get(request,id)
+
+
+
+
+########### Clase para lista de equipos ##########
+
+class EquiposView(View): 
+
+
+    def get(self, request):
+
+        equipos = Equipo.objects.all()
+        
+        context = {}
+        context['segment'] = 'index'
+        context['lista_equipos'] = equipos
+
+        html_template = loader.get_template( 'equipos.html' )
+        return HttpResponse(html_template.render(context, request))
+        
+
+    def post(self, request):
+        
+        context = {}
+        context['segment'] = 'index'
+
+        html_template = loader.get_template( 'equipos.html' )
+        return HttpResponse(html_template.render(context, request))
+
+
+
+########### Clase para detalle de equipo ########## 
+
+class EquipoDetailView(View):
+
+    def get(self, request,id):
+
+        equipo = Equipo.objects.get(pk=id)
+        incidencias = Incidencia.objects.all()
+
+        
+        context = {}
+        context['segment'] = 'index'
+        context['equipo'] = equipo
+        context['lista_incidentes'] = incidencias
+
+        html_template = loader.get_template( 'equipo-detalle.html' )
+        return HttpResponse(html_template.render(context, request))
+        
+
+    def post(self, request):
+        
+        context = {}
+        context['segment'] = 'index'
+
+        html_template = loader.get_template( 'equipo-detalle.html' )
+        return HttpResponse(html_template.render(context, request))
+

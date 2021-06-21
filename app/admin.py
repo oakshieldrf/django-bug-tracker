@@ -12,8 +12,8 @@ class EquipoAdmin(admin.ModelAdmin):
 
 @admin.register(Incidencia)
 class IncidenciaAdmin(admin.ModelAdmin):
-    list_display = ('tituloIncidente','tipoSolicitud', 'severidad', 'descripcion', 'autor', 'fechaCreacion', 'estado', 'equipo')
-    list_filter = ('severidad','tipoSolicitud', 'estado', 'equipo')
-    search_fields = ('tituloIncidente','equipo')
+    list_display = ('titulo','tipo', 'grado', 'descripcion', 'autor', 'fechaCreacion', 'estado', 'equipo')
+    list_filter = ('grado','tipo', 'estado', 'equipo')
+    search_fields = ('titulo','equipo')
 
 

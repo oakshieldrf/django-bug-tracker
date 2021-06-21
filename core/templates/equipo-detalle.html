@@ -1,0 +1,177 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+			
+	<div class="content">
+		<div class="page-inner mt--5">
+            <div class="page-header mt-5">
+                <h4 class="page-title">Equipo</h4>
+                <ul class="breadcrumbs">
+                    <li class="nav-home">
+                        <a href="#">
+                            <i class="flaticon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="flaticon-right-arrow"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">Equipos</a>
+					</li>
+                    <li class="separator">
+                        <i class="flaticon-right-arrow"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#">(NOMBRE-EQUIPO-AQUI)</a>
+					</li>
+					
+					{% if messages %}
+						{% for message in messages %}
+							<li class="text-{{message.tags}} ml-4" style="font-size:2rem!important; "><h5>{{message}}</h5></li>
+						{% endfor %}
+					{% endif %}
+                </ul>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <div class="card">
+                    	<div class="card-header">
+							<div class="d-flex align-items-center">
+								<h4 class="card-title">Información del equipo</h4>
+							</div>
+						</div>
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
+
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class=" col-sm-3 col-md-2">
+                                                        <p>Nombre:</p>
+                                                    </div>
+                                                    <div class="col-sm-9 col-lg-5">
+                                                        <div class="form-group form-floating-label pt-0">
+                                                            <input id="inputFloatingLabel" type="text" class="form-control input-border-bottom pt-0" style="font-size:1rem;" required="" value="nombre-equipo" name="nombre" id="nombre">
+                                                            <label for="inputFloatingLabel" class="placeholder"></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class=" col-sm-3 col-md-2">
+                                                        <p>Descripción:</p>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group form-floating-label  pl-md-0">
+                                                            <textarea type="textarea" class="form-control" id="descripcion" name="descripcion" required="" rows="5">Texto descripcion olah</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class=" col-sm-3 col-md-2">
+                                                        <p>Fecha de creación:</p>
+                                                    </div>
+                                                    <div class="col-sm-9 col-lg-5">
+                                                        <p class="font-weight-bold">12 de Junio 2021 18:45</p>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class=" col-sm-3 col-md-2">
+                                                        <p>Total de horas de trabajo:</p>
+                                                    </div>
+                                                    <div class="col-sm-4 col-lg-2 pr-1">
+                                                        <p class="font-weight-bold">128.6 </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>	
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!------ SECCION INCIDENCIAS ASIGNADAS ------->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+						<div class="card-body">
+				<!-- LISTA DE INCIDENCIAS -->
+                           {% include "layouts/lista-incidencias.html" %} 
+						</div>
+					</div>
+                </div>
+            </div>
+        <!---- SECCION MIEMBROS DE EQUIPO ------>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+						<div class="card-body">
+                           <div class="card-header">
+                                <div class="d-flex align-items-center">
+                                    <h4 class="card-title">Miembros</h4>
+                                </div>
+                           </div>
+                           <div class="col-sm-12">
+                                <table id="basic-datatables" class="display table table-striped table-responsive table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                    <thead>
+                                        <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="basic-datatables" rowspan="1" colspan="1" style="width:15%" aria-sort="ascending" aria-label="Name: activate to sort column descending">Nombre</th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatables" rowspan="1" colspan="1" style="width:15%;" aria-label="Correo electrónico: activate to sort column ascending">Correo electrónico</th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatables" rowspan="1" colspan="1" style="width:15%;" aria-label="Rol: activate to sort column ascending">Rol</th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatables" rowspan="1" colspan="1" style="width:20%;" aria-label="Estado: activate to sort column ascending">Estado </th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatables" rowspan="1" colspan="1" style="width:25%" aria-label="Acciones: activate to sort column ascending">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>									
+                                        <tr role="row" class="odd">
+                                            <td class="sorting_1">Airi Satou</td>
+                                            <td>Accountant</td>
+                                            <td>
+                                                <div class="form-group p-0">                 
+                                                    <div class="input-group">
+                                                        <select class="form-control btn btn-primary dropdown-toggle" id="rol" name="rol">
+                                                            <option class="dropdown-item" selected="selected" disabled>Rol</option>
+                                                            <option class="dropdown-item" value="dev" >Desarrollador</option>
+                                                            <option class="dropdown-item" value="scrum-master">Scrum Master</option>
+                                                            <option class="dropdown-item" value="stake">Stakeholder</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>     
+                                                <div class="pt-2">
+                                                    <p class="text-white text-center bg-success p-1" style="width: max-content;">VERIFICADO</p> 
+                                                </div>
+                                            </td>
+                                            <td>2008/11/28</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                </div>
+						</div>
+					</div>
+                </div>
+            </div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+	<!-- Atlantis DEMO methods, don't include it in your project! -->
+<!--<script src="/static/assets/js/setting-demo.js"></script> -->
+<!--<script src="/static/assets/js/demo.js"></script> -->
+<script src="/static/assets/js/setting-demo2.js"></script>
+
+{% endblock javascripts %}
