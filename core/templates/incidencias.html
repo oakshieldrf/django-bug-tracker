@@ -70,13 +70,13 @@
 													<div class="col-sm-9 pr-0">
 														<div class="form-group form-group-default">
 															<label> Título</label>
-															<input id="nombre" type="text" name="nombre" class="form-control" placeholder="Introduce el titulo de la incidencia">
+															<input id="nombre" type="text" name="nombre" class="form-control" placeholder="Introduce el titulo de la incidencia" required>
 														</div>
                                                     </div>
                                                     <div class="col-sm-3">
 														<div class="form-group p-0">                 
                                                             <div class="input-group">
-																<select class="form-control btn btn-primary dropdown-toggle" id="grado" name="grado">
+																<select class="form-control btn btn-primary dropdown-toggle" id="grado" name="grado" required>
 																	<option class="dropdown-item" selected="selected" disabled>Grado</option>
 																	<option class="dropdown-item" value="P1" >P1 - Crítico</option>
 																	<option class="dropdown-item" value="P2">P2 - Alto</option>
@@ -90,13 +90,13 @@
                                                    <div class="col-md-12">
 														<div class="form-group form-group-default ">
 															<label>Descripción</label>
-															<input id="descripcion" name="descripcion" type="textarea" aria-rowspan="5" class="form-control" placeholder="Describe cual es y como se genero el bug/incidencia">
+															<input id="descripcion" name="descripcion" type="textarea" aria-rowspan="5" class="form-control" placeholder="Describe cual es y como se genero el bug/incidencia" required>
 														</div>
 													</div>
 													<div class="col-md-4 pr-1">
 														<div class="form-group p-0">                 
                                                             <div class="input-group">
-																<select class="form-control btn btn-primary dropdown-toggle" id="equipo" name="equipo">
+																<select class="form-control btn btn-primary dropdown-toggle" id="equipo" name="equipo" required>
 																	<option class="dropdown-item" selected="selected" disabled>Equipo</option>
 																	{% for equipo in equipos %}
 																		<option class="dropdown-item" value="{{equipo.id}}" >{{equipo.nombre}}</option>
@@ -108,7 +108,7 @@
                                                     <div class="col-md-4 pr-1">
 														<div class="form-group p-0">                 
                                                             <div class="input-group">
-																<select class="form-control btn btn-primary dropdown-toggle" id="tipo" name="tipo">
+																<select class="form-control btn btn-primary dropdown-toggle" id="tipo" name="tipo" required>
 																	<option class="dropdown-item" selected="selected" disabled>Tipo</option>
 																	<option class="dropdown-item" value="incidencia" >Incidencia</option>
 																	<option class="dropdown-item" value="mejora" >Mejora</option>												
@@ -119,7 +119,7 @@
                                                     <div class="col-md-4">
 														<div class="form-group p-0">                 
                                                             <div class="input-group">
-																<select class="form-control btn btn-primary dropdown-toggle" id="responsables" name="responsables">
+																<select class="form-control btn btn-primary dropdown-toggle" id="responsables" name="responsables" required>
 																	<option class="dropdown-item" selected="selected" disabled>Responsables</option>
 																	{% for miembro in responsables %}
 																		<option class="dropdown-item" value="{{miembro.id}}" >{{miembro.username}} </option>
@@ -133,7 +133,7 @@
                                                     <div class="col-sm-12 mt-4">
                                                         <div class="form-group">
 															<label> Horas estimadas:</label>
-															<input id="horas" name="horas" type="time" class="form-control" >
+															<input id="horas" name="horas" type="time" class="form-control" required>
 														</div>
                                                     </div>
                                                 </div> 

@@ -16,9 +16,7 @@ class Equipo(models.Model):
     miembros = models.ForeignKey(User, on_delete=models.CASCADE,  related_name="equipo_miembros")
     #proyectos = models
     descripcion = models.TextField(max_length=200)
-    horasTrabajo = models.TimeField(auto_now=False, auto_now_add=False)
-
-
+    horasTrabajo = models.TimeField(auto_now=False, auto_now_add=False, null=True)
 
 
 #Modelo para incidencias

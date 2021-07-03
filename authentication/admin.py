@@ -2,5 +2,10 @@
 
 
 from django.contrib import admin
+from .models import UserExtend
 
-# Register your models here.
+
+@admin.register(UserExtend)
+class UserAdmin(admin.ModelAdmin):
+
+        list_display = ('user', 'horasTrabajo', 'ultimoUpdate' )

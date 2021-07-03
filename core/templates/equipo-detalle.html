@@ -27,7 +27,7 @@
                         <i class="flaticon-right-arrow"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">(NOMBRE-EQUIPO-AQUI)</a>
+                        <a href="{% url 'app:equipo_detalle' equipo.id %}">{{equipo.nombre}} </a>
 					</li>
 					
 					{% if messages %}
@@ -59,8 +59,8 @@
                                                     </div>
                                                     <div class="col-sm-9 col-lg-5">
                                                         <div class="form-group form-floating-label pt-0">
-                                                            <input id="inputFloatingLabel" type="text" class="form-control input-border-bottom pt-0" style="font-size:1rem;" required="" value="nombre-equipo" name="nombre" id="nombre">
-                                                            <label for="inputFloatingLabel" class="placeholder"></label>
+                                                            <input id="inputFloatingLabel" type="text" class="form-control input-border-bottom pt-0" style="font-size:1rem;" required name="nombre" id="nombre" value="{{equipo.nombre}}">
+                                                            <label for="inputFloatingLabel" class="placeholder" ></label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -70,7 +70,7 @@
                                                     </div>
                                                     <div class="col-md-8">
                                                         <div class="form-group form-floating-label  pl-md-0">
-                                                            <textarea type="textarea" class="form-control" id="descripcion" name="descripcion" required="" rows="5">Texto descripcion olah</textarea>
+                                                            <textarea type="textarea" class="form-control" id="descripcion" name="descripcion" required rows="5" value="equipo.descripcion">{{equipo.descripcion|capfirst}}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -79,7 +79,7 @@
                                                         <p>Fecha de creación:</p>
                                                     </div>
                                                     <div class="col-sm-9 col-lg-5">
-                                                        <p class="font-weight-bold">12 de Junio 2021 18:45</p>
+                                                        <p class="font-weight-bold">{{equipo.fechaCreacion}} </p>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -87,11 +87,20 @@
                                                         <p>Total de horas de trabajo:</p>
                                                     </div>
                                                     <div class="col-sm-4 col-lg-2 pr-1">
-                                                        <p class="font-weight-bold">128.6 </p>
+                                                        {% if equipo.horasTrabajo != None %}
+                                                            <p class="font-weight-bold">{{equipo.horasTrabajo}}</p>
+                                                        {% else %}
+                                                            <p class="font-weight-bold">Aún no hay horas registradas</p>
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-5 mb-5">
+                                    <div class="col-12">
+                                        <button class="btn btn-success" type="submit">Actualizar datos</button>
                                     </div>
                                 </div>
                             </form>	
@@ -104,8 +113,12 @@
                 <div class="col-md-12">
                     <div class="card">
 						<div class="card-body">
-				<!-- LISTA DE INCIDENCIAS -->
-                           {% include "layouts/lista-incidencias.html" %} 
+                <!-- LISTA DE INCIDENCIAS -->
+                            {% if lista_incidentes %}
+                                {% include "layouts/lista-incidencias.html" %} 
+                            {% else %}
+                                <h4 class="font-weight-bold">Este equipo todavia no tiene incidencias asignadas</h4>
+                            {% endif %}
 						</div>
 					</div>
                 </div>
@@ -120,6 +133,8 @@
                                     <h4 class="card-title">Miembros</h4>
                                 </div>
                            </div>
+                          
+                           {% if miembros %}
                            <div class="col-sm-12">
                                 <table id="basic-datatables" class="display table table-striped table-responsive table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                     <thead>
@@ -133,30 +148,46 @@
                                     </thead>
                                     <tbody>									
                                         <tr role="row" class="odd">
-                                            <td class="sorting_1">Airi Satou</td>
-                                            <td>Accountant</td>
+                                            <td class="sorting_1">{{miembros.username}}</td>
+                                            <td>{{miembros.email}} </td>
                                             <td>
                                                 <div class="form-group p-0">                 
                                                     <div class="input-group">
-                                                        <select class="form-control btn btn-primary dropdown-toggle" id="rol" name="rol">
-                                                            <option class="dropdown-item" selected="selected" disabled>Rol</option>
-                                                            <option class="dropdown-item" value="dev" >Desarrollador</option>
-                                                            <option class="dropdown-item" value="scrum-master">Scrum Master</option>
-                                                            <option class="dropdown-item" value="stake">Stakeholder</option>
-                                                        </select>
+                                                        <p class="text-white text-center  bg-warning p-1" style="width: max-content;"> 
+                                                           {{miembros.groups.name}} </p> 
+                                                    
                                                     </div>
                                                 </div>
                                             </td>
                                             <td>     
                                                 <div class="pt-2">
-                                                    <p class="text-white text-center bg-success p-1" style="width: max-content;">VERIFICADO</p> 
+                                                    <p class="text-white text-center  {%if miembros.is_active%} bg-success {% else %} bg-danger {% endif %} p-1" style="width: max-content;"> 
+                                                        {% if miembros.is_active %} VERIFICADO {% else %} NO VERIFICADO {% endif %}</p> 
                                                 </div>
                                             </td>
-                                            <td>2008/11/28</td>
+                                            <td>
+                                                <div class="form-button-action pt-3">
+                                                    <a href="#" type="button" data-toggle="tooltip" title="" class="btn  btn-primary btn-sm" data-original-title="Ver usuario">
+                                                        <i class="far fa-eye" style="font-size:1rem;"></i>
+                                                    </a>
+                                                </div>
+                                                {% if request.user.groups == 'scrum master' %}
+                                                <div class="form-button-action pt-3">
+                                                    <a href="#" type="button" data-toggle="tooltip" title="" class="btn  btn-danger btn-sm" data-original-title="Remover del equipo">
+                                                        <i class="fas fa-times" style="font-size:1rem;"></i>
+                                                    </a>
+                                                </div>
+                                                {% endif %}
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
-                                </div>
+                           </div>
+                           {% else %}
+                            <div class="col-12">
+                                <h4 class="font-weight-bold" >Este equipo todavia no tiene miembros asignados</h4>
+                            </div> 
+                           {% endif %}
 						</div>
 					</div>
                 </div>

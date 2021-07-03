@@ -11,3 +11,9 @@ class IncidenciaForm(forms.Form):
     horas = forms.TimeField()
 
 
+
+class EquipoForm(forms.Form): 
+    nombre = forms.CharField(max_length=100)
+    descripcion = forms.CharField(widget=forms.Textarea)
+    miembros = forms.CharField(widget=forms.Select)
+    

@@ -41,13 +41,13 @@
 					<div class="collapase navbar-collapse" id="">
 						<ul class="navbar-nav mb-2 ml-4 mb-lg-0">
 							<li class="nav-item pl-3 pr-3">
-							  <a class="nav-link active" aria-current="page" href="/incidencias">Incidencias</a>
+							  <a class="nav-link active" aria-current="page" href="{% url 'app:incidencias_list' %} ">Incidencias</a>
 							</li>
 							<li class="nav-item pl-3 pr-3">
-							  <a class="nav-link" href="/equipos">Equipos</a>
+							  <a class="nav-link" href="{% url 'app:equipos_list' %}">Equipos</a>
 							</li>
 							<li class="nav-item pl-3 pr-3">
-							  <a class="nav-link" href="#">
+							  <a class="nav-link" href="{% url 'app:usuarios_list' %}">
 								Usuarios
 							  </a>
 							</li>

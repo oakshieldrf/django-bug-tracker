@@ -6,10 +6,12 @@ from django.shortcuts import render
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.forms.utils import ErrorList
 from django.http import HttpResponse
 from .forms import LoginForm, SignUpForm
+from .models import UserExtend
+import datetime
 
 def login_view(request):
     form = LoginForm(request.POST or None)
@@ -26,9 +28,9 @@ def login_view(request):
                 login(request, user)
                 return redirect("/")
             else:    
-                msg = 'Invalid credentials'    
+                msg = 'Datos inválidos'    
         else:
-            msg = 'Error validating the form'    
+            msg = 'Error validando el formulario'    
 
     return render(request, "accounts/login.html", {"form": form, "msg" : msg})
 
@@ -40,18 +42,26 @@ def register_user(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
+
+            new_user = form.save()
             username = form.cleaned_data.get("username")
             raw_password = form.cleaned_data.get("password1")
             user = authenticate(username=username, password=raw_password)
+            new_profile = UserExtend.objects.create(user=new_user)
+            horas = datetime.time(00,00,00)
+            new_profile.horasTrabajo = horas
+            curfechaHora = datetime.datetime.now()
+            fh_string = curfechaHora.strftime("%d/%m/%Y %H:%M:%S") 
+            new_profile.ultimoUpdate = fh_string
+            new_profile.user.groups.add(Group.objects.get(name='desarrollador')) 
 
-            msg     = 'User created - please <a href="/login">login</a>.'
+            msg     = 'Usuario creado - por favor <a href="/login">Inicia sesión</a>.'
             success = True
             
-            #return redirect("/login/")
+            return redirect("/login")
 
         else:
-            msg = 'Form is not valid'    
+            msg = 'El formulario no es válido'    
     else:
         form = SignUpForm()
 

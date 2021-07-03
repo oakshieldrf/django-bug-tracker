@@ -4,7 +4,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
 	<title>
-        Django Atlantis Dark - {% block title %}{% endblock %} | AppSeed
+        Bug Tracker - {% block title %}{% endblock %}
     </title>
 
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
@@ -34,12 +34,12 @@
     {% block stylesheets %}{% endblock stylesheets %}
 
 </head>
-<body data-background-color="dark">
+<body data-background-color="dark"></body>
 	<div class="wrapper">
 
 		{% include 'includes/navigation.html' %}
 		
-		{% if request.path != '/login/' and request.path != '/register/'  %}
+		{% if request.path != '/login' and request.path != '/register/'  %}
 
 			{% include 'includes/sidebar.html' %}
 

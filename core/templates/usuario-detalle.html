@@ -1,0 +1,185 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Usuario {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{{usuario.firstname}} {% endblock stylesheets %}
+
+{% block content %}
+			
+	<div class="content">
+		<div class="page-inner mt--5">
+            <div class="page-header mt-5">
+                <h4 class="page-title"></h4>
+                <ul class="breadcrumbs">
+                    <li class="nav-home">
+                        <a href="#">
+                            <i class="flaticon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="flaticon-right-arrow"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'app:usuarios_list' %}">Usuarios</a>
+					</li>
+                    <li class="separator">
+                        <i class="flaticon-right-arrow"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'app:usuario_detalle' usuario.id %}">{{usuario.first_name}} </a>
+					</li>
+					
+					{% if messages %}
+						{% for message in messages %}
+							<li class="text-{{message.tags}} ml-4" style="font-size:2rem!important; "><h5>{{message}}</h5></li>
+						{% endfor %}
+					{% endif %}
+                </ul>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <div class="card">
+                    	<div class="card-header">
+							<div class="d-flex align-items-center">
+								<h4 class="card-title">Detalles de usuario</h4>
+							</div>
+						</div>
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
+
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class=" col-sm-12 col-md-6">
+                                                        <p>Nombre:</p>
+                                                        {% if request.user.id == usuario.id %}
+                                                        <div class="form-group form-floating-label pt-0 pl-0">
+                                                            <input id="inputFloatingLabel" type="text" class="form-control input-border-bottom pt-0" style="font-size:1rem;" required name="nombre" id="nombre" value="{{usuario.first_name}}">
+                                                            <label for="inputFloatingLabel" class="placeholder" ></label>
+                                                        </div>
+                                                        {% else %}
+                                                        <p  style="font-size:1rem; color: aliceblue;">{{usuario.first_name}} </p>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class=" col-sm-12 col-md-6">
+                                                        <p>Apellidos:</p>
+                                                        {% if request.user.id == usuario.id %}
+                                                        <div class="form-group form-floating-label pt-0 pl-0">
+                                                            <input id="inputFloatingLabel" type="text" class="form-control input-border-bottom pt-0" style="font-size:1rem;" required name="apellido" id="apellido" value="{{usuario.last_name}}">
+                                                            <label for="inputFloatingLabel" class="placeholder" ></label>
+                                                        </div>
+                                                        {% else %}
+                                                        <p  style="font-size:1rem; color: aliceblue;">{{usuario.last_name}} </p>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-2">
+                                                    <div class=" col-sm-12 col-md-6">
+                                                        <p>Correo electrónico:</p>
+                                                        {% if request.user.id == usuario.id %}
+                                                        <div class="form-group form-floating-label pt-0 pl-0">
+                                                            <input id="inputFloatingLabel" type="email" class="form-control input-border-bottom pt-0" style="font-size:1rem;" required name="email" id="email" value="{{usuario.email}}">
+                                                            <label for="inputFloatingLabel" class="placeholder" ></label>
+                                                        </div>
+                                                        {% else %}
+                                                        <p  style="font-size:1rem; color: aliceblue;">{{usuario.email}} </p>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-2">
+                                                    <div class=" col-sm-12 col-md-6">
+                                                        <p>Rol:</p>
+                                                        <p  style="font-size:1rem; color: aliceblue;">{{roles.name|capfirst}} </p>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-2">
+                                                    <div class=" col-sm-12 col-md-6">
+                                                        <p>Equipo(s) asignados:</p>
+                                                        {% if equipos %}
+                                                        <ul class="list-group">
+                                                        {% for equipo in equipos %}
+                                                           <li class="list-group-item"><a href="{% url 'app:equipo_detalle' equipo.id   %}" style="font-size:1rem; color: aliceblue;">{{equipo.nombre}} </a></li> 
+                                                        {% endfor %}
+                                                        </ul>
+                                                        {% else %}
+                                                        <p  style="font-size:1rem; color: aliceblue;">NO ESTA ASIGNADO A UN EQUIPO TODAVIA</p>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-3">
+                                                    <div class=" col-sm-12 col-md-6">
+                                                        <p>Estado de la cuenta:</p>
+                                                        {% if request.user.is_staff %}
+                                                        <div class="form-group p-0 w-auto">                 
+                                                            <div class="input-group">
+                                                                <select class="form-control btn btn-primary dropdown-toggle" id="estado" name="estado">
+                                                                    <option class="dropdown-item" >Estado </option> 
+                                                                        <option class="dropdown-item" value="True"> Verificado </option>
+                                                                        <option class="dropdown-item" value="False"> Deshabilitado <option>
+                                                                    </select>
+                                                            </div>
+                                                        </div>
+                                                        {% else %}
+                                                        <p class="rounded p-1 {% if usuario.is_active == True %} bg-success {% else %} bg-danger  {% endif %} " style="font-size:.8rem; color: aliceblue; width:max-content">
+                                                            {% if usuario.is_active == True %} VERIFICADO {% else %} DESHABILITADO {%endif%}
+                                                        </p>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-2">
+                                                    <div class=" col-sm-12 col-md-6">
+                                                        <p>Total de horas trabajadas en incidencias:</p>
+                                                        <p class="" style="font-size:1rem; color: aliceblue;">
+                                                            {{ userextend.horasTrabajo }} hrs.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-2">
+                                                    <div class=" col-sm-12 col-md-6">
+                                                        <p>Fecha de Registro:</p>
+                                                        <p class="" style="font-size:1rem; color: aliceblue;">
+                                                            {{ usuario.date_joined }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-2">
+                                                    <div class=" col-sm-12 col-md-6">
+                                                        <p>Última conexión:</p>
+                                                        <p class="" style="font-size:1rem; color: aliceblue;">
+                                                            {{ usuario.last_login }}
+                                                        </p>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if request.user.id == usuario.id %}
+                                <div class="row mt-5 mb-5">
+                                    <div class="col-12">
+                                        <button class="btn btn-success" type="submit">Actualizar datos</button>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </form>	
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+	<!-- Atlantis DEMO methods, don't include it in your project! -->
+<!--<script src="/static/assets/js/setting-demo.js"></script> -->
+<!--<script src="/static/assets/js/demo.js"></script> -->
+<script src="/static/assets/js/setting-demo2.js"></script>
+
+{% endblock javascripts %}

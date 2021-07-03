@@ -1,0 +1,129 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+			
+	<div class="content">
+		<div class="page-inner mt--5">
+            <div class="page-header mt-5">
+                <h4 class="page-title">Usuarios</h4>
+                <ul class="breadcrumbs">
+                    <li class="nav-home">
+                        <a href="#">
+                            <i class="flaticon-home"></i>
+                        </a>
+                    </li>
+                    <li class="separator">
+                        <i class="flaticon-right-arrow"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/">Inicio</a>
+					</li>
+                    <li class="separator">
+                        <i class="flaticon-right-arrow"></i>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'app:usuarios_list' %}"> Usuarios </a>
+					</li>
+					
+					{% if messages %}
+						{% for message in messages %}
+							<li class="text-{{message.tags}} ml-4" style="font-size:2rem!important; "><h5>{{message}}</h5></li>
+						{% endfor %}
+					{% endif %}
+                </ul>
+            </div>
+      
+        <!---- SECCION LISTA DE USUARIOS ------>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+						<div class="card-body">
+                           <div class="card-header">
+                                <div class="d-flex align-items-center">
+                                    <h4 class="card-title">Todos los usuarios</h4>
+                                </div>
+                           </div>
+                          
+                           {% if usuarios %}
+                           <div class="col-sm-12">
+                                <table id="basic-datatables" class="display table table-striped table-responsive table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                    <thead>
+                                        <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="basic-datatables" rowspan="1" colspan="1" style="width:15%" aria-sort="ascending" aria-label="Name: activate to sort column descending">Nombre</th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatables" rowspan="1" colspan="1" style="width:15%;" aria-label="Correo electrónico: activate to sort column ascending">Correo electrónico</th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatables" rowspan="1" colspan="1" style="width:15%;" aria-label="Rol: activate to sort column ascending">Rol</th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatables" rowspan="1" colspan="1" style="width:20%;" aria-label="Estado: activate to sort column ascending">Estado </th>
+                                        <th class="sorting" tabindex="0" aria-controls="basic-datatables" rowspan="1" colspan="1" style="width:25%" aria-label="Acciones: activate to sort column ascending">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for usuario in usuarios %}									
+                                        <tr role="row" class="odd">
+                                            <td class="sorting_1">{{usuario.username}}</td>
+                                            <td>{{usuario.email}} </td>
+                                            <td>
+                                                <div class="form-group p-0">                 
+                                                    <div class="input-group">
+                                                        <p class="text-white text-center  bg-warning p-1" style="width: max-content;"> 
+                                                           {% if usuario.groups.first %}
+                                                             {{usuario.groups.first|capfirst}} 
+                                                           {% else %}
+                                                             Ninguno
+                                                           {% endif %}
+                                                        </p> 
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>     
+                                                <div class="pt-2">
+                                                    <p class="text-white text-center  {%if usuario.is_active%} bg-success {% else %} bg-danger {% endif %} p-1" style="width: max-content;"> 
+                                                        {% if usuario.is_active %} VERIFICADO {% else %} NO VERIFICADO {% endif %}</p> 
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-button-action pt-3">
+                                                    <a href="{% url 'app:usuario_detalle' usuario.id %}" type="button" data-toggle="tooltip" title="" class="btn  btn-primary btn-sm" data-original-title="Ver usuario">
+                                                        <i class="far fa-eye" style="font-size:.8rem;"></i>
+                                                    </a>
+                                                </div>
+                                                {% if request.user.groups == "scrum master" %}
+                                                <div class="form-button-action pt-3">
+                                                    <a href="#" type="button" data-toggle="tooltip" title="" class="btn  btn-danger btn-sm" data-original-title="Remover del equipo">
+                                                        <i class="fas fa-times" style="font-size:1rem;"></i>
+                                                    </a>
+                                                </div>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                           </div>
+                           {% else %}
+                            <div class="col-12">
+                                <h4 class="font-weight-bold" >Todavia no hay usuarios registrados</h4>
+                            </div> 
+                           {% endif %}
+						</div>
+					</div>
+                </div>
+            </div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+	<!-- Atlantis DEMO methods, don't include it in your project! -->
+<!--<script src="/static/assets/js/setting-demo.js"></script> -->
+<!--<script src="/static/assets/js/demo.js"></script> -->
+<script src="/static/assets/js/setting-demo2.js"></script>
+
+{% endblock javascripts %}
