@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Dashboard {% endblock %} 
+{% block title %} {{incidencia.titulo}} {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -12,29 +12,63 @@
 		<form method="post">
 			{% csrf_token %}
             <div class="page-header mb-0">
-                <h4>ID: {{incidencia.id}}</h4>
+                <h4 class="p-3">ID: {{incidencia.id}}</h4>
             </div>
             <div class="page-header ">
-				<div class="form-group p-0 mt-4">                 
-					<div class="input-group">
-						<select class="form-control btn btn-danger dropdown-toggle mr-2" id="grado" name="grado">
-							<option class="dropdown-item" value="{{incidencia.grado}}">{{incidencia.grado}}</option>
-							{% for key, value in grado %}
-								{% if key != incidencia.grado %}
-									<option class="dropdown-item" value="{{key}}" >{{key}} - {{value}}</option>
+				<div class="form-group p-0 mt-4 mb-3">  
+					<div class="row">
+						<div class="col-sm-6 col-md-8">
+						{% if isResponsable or request.user.is_staff %}
+							<div class="input-group">
+								<select class="form-control btn 
+
+								{% if incidencia.grado == 'P1' %} bg-danger 
+								{% elif  incidencia.grado == 'P2'  %} bg-warning
+								{% elif  incidencia.grado == 'P3'  %} bg-info
+								{% elif  incidencia.grado == 'P4'  %} bg-secondary
+								{% elif  incidencia.grado == 'P5'  %} bg-success
 								{% endif %}
-							{% endfor %}
-						</select>
-					</div>
+
+								dropdown-toggle mr-2" id="grado" name="grado">
+									<option class="dropdown-item" value="{{incidencia.grado}}">{{incidencia.grado}}</option>
+									{% for key, value in grado %}
+										{% if key != incidencia.grado %}
+											<option class="dropdown-item" value="{{key}}" >{{key}} - {{value}}</option>
+										{% endif %}
+									{% endfor %}
+								</select>
+							</div>
+						{% else %}
+						<label class="colorinput">
+							<input name="color"  value="primary" data-toggle="tooltip" data-original-title="{{incidencia.get_grado_display}} " class="colorinput-input">
+							<span class="stamp stamp-md	mr-3
+								{% if incidencia.grado == 'P1' %} bg-danger 
+								{% elif  incidencia.grado == 'P2'  %} bg-warning
+								{% elif  incidencia.grado == 'P3'  %} bg-info
+								{% elif  incidencia.grado == 'P4'  %} bg-secondary
+								{% elif  incidencia.grado == 'P5'  %} bg-success
+								{% endif %}
+							">
+								{{incidencia.grado}}
+							</span>
+						</label>
+						{% endif %}
+						</div>   
+					</div>            
 				</div>
                 <div class="d-flex flex-column ">
-                    <small>{{incidencia.fechaCreacion}}</small>
-					<div class="form-group form-floating-label">
+                    <small class="p-2">{{incidencia.fechaCreacion}}</small>
+					<div class="form-group form-floating-label mb-3">
+						{% if isResponsable or request.user.is_staff %}
 						<input id="inputFloatingLabel" type="text" class="form-control input-border-bottom" style="font-size:1.8rem;" required="" value="{{incidencia.titulo}}" name="nombre" id="nombre">
 						<label for="inputFloatingLabel" class="placeholder"></label>
+						{% else %}
+							<h2 class="text-white">{{incidencia.titulo}} </h2>
+						{% endif %}
 					</div>
                 </div>
                 <div class="w-50 d-flex flex-row-reverse">
+					{% if isResponsable or request.user.is_staff %}
 					<div class="form-group p-0">                 
 						<div class="input-group">
 							<select class="form-control btn btn-primary dropdown-toggle" id="estado" name="estado">
@@ -49,6 +83,14 @@
 							</select>
 						</div>
 					</div>
+					{% else %}
+					<label class="colorinput">
+						<input name="color"  value="primary" data-toggle="tooltip" data-original-title="{{incidencia.estado}} " class="colorinput-input bg-primary">
+						<span class="stamp stamp-md	mr-3 tex-white ">
+							{{incidencia.estado|capfirst}}
+						</span>
+					</label>
+					{% endif %}
                 </div>
             </div>
             <div class="row mt-4">
@@ -57,16 +99,23 @@
 						<div class="card-header">
 							<div class="d-flex align-items-center">
 								<h4 class="card-title"> Detalles de la incidencia </h4>
+								{% if messages %}
+									{% for message in messages %}
+										<li class="{% if message.tags == 'error' %} text-danger {% else %} text-success {% endif %}  ml-4" style="font-size:2rem!important; "><h5>{{message}}</h5></li>
+									{% endfor %}
+								{% endif %}
+		
 							</div>
 						</div>
 						<div class="card-body">
-                            <div class="row">
+                            <div class="row mb-4">
                                 <div class="col-md-2">
                                     <p>Responsables</p>
                                 </div>
-                                <div class="col-sm-4 col-lg-2">
-									<a href="#">{{incidencia.responsables}}</a>
+                                <div class="col-sm-4 col-lg-2 mb-3">
+									<a href="{% url 'app:usuario_detalle' incidencia.responsables.id %} " class="font-weight-bold" >{{incidencia.responsables}}</a>
 								</div>
+								{% if isResponsable or request.user.is_staff %}
 								<div class="col-sm-6 col-lg-3">
 									<div class="form-group p-0 w-auto">                 
 										<div class="input-group">
@@ -79,14 +128,16 @@
 										</div>
 									</div>
 								</div>
+								{% endif %}
                             </div>
-                            <div class="row mt-2">
+                            <div class="row mt-2 mb-4">
                                 <div class="col-md-2">
                                     <p>Equipo</p>
                                 </div>
-                                <div class="col-sm-4 col-lg-2">
-									<a href="#">{{incidencia.equipo}}</a>
+                                <div class="col-sm-4 col-lg-2 mb-3">
+									<a href="{% url 'app:equipo_detalle' incidencia.equipo.id %} " style="font-size:1rem; font-weight:bold;">{{incidencia.equipo.nombre}}</a>
 								</div>
+								{% if isResponsable or request.user.is_staff %}
 								<div class="col-sm-6 col-lg-3">
 									<div class="form-group p-0 w-auto">                 
 										<div class="input-group">
@@ -99,13 +150,14 @@
 										</div>
 									</div>
 								</div>
+								{% endif %}
                             </div>
-                            <div class="row mt-3">
+                            <div class="row mt-3 mb-4">
                                 <div class="col-md-2">
                                     <p>Última actualización</p>
                                 </div>
                                 <div class="col-md-8">
-                                    <p class="font-weight-bold">{{incidencia.fechaModificacion}}</p>
+                                    <p class="font-weight-bold" style="font-size:1rem; color: aliceblue;">{{incidencia.fechaModificacion}}</p>
                                 </div>
                             </div>
                             <div class="row mt-2">
@@ -123,16 +175,17 @@
                                     <p>Grado</p>
                                 </div>
                                 <div class="col-md-8">
-									<p class="font-weight-bold">{{incidencia.grado}}</p>
+									<p class="font-weight-bold" style="font-size:1rem; color: aliceblue;">{{incidencia.grado}} - {{incidencia.get_grado_display}}</p>
                                 </div>
 							</div>
 							<div class="row mt-2">
 								<div class="col-md-2">
-									<p>Tipo</p>
+									<p> Tipo</p>
 								</div>
 								<div class="col-sm-4 col-lg-2 pr-1">
-									<p  class="font-weight-bold">{{incidencia.tipo}} </p>
+									<p  class="font-weight-bold" style="font-size:1rem; color: aliceblue;">{{incidencia.tipo|capfirst}} </p>
 								</div>
+								{% if isResponsable or request.user.is_staff %}
 								<div class="col-sm-6 col-lg-3">
 									<div class="form-group p-0">                 
 										<div class="input-group">
@@ -147,12 +200,34 @@
 										</div>
 									</div>
 								</div>
+								{% endif %}
 							</div>
+							<div class="row mt-2">
+								<div class="col-md-2">
+									<p>Horas estimadas</p>
+								</div>
+								{% if isResponsable or request.user.is_staff %}
+								<div class="col-sm-6 col-lg-3">
+									<div class="form-group p-0">                 
+										<div class="input-group">
+											<input type="number" class="form-control input-border-bottom" style="font-size:1rem;" required value="{{incidencia.horasEstimadas}}" name="horas" id="horas" step="1.00" min="0">
+										</div>
+									</div>
+								</div>
+								{% else %}
+								<div class="col-sm-4 col-lg-2 pr-1">
+									<p  class="font-weight-bold" style="font-size:1rem; color: aliceblue;">{{incidencia.horasEstimadas}} </p>
+								</div>
+								{% endif %}
+							</div>
+							{% if isResponsable or request.user.is_staff %}
 							<div class="row mt-5 mb-5">
 								<div class="col-12">
 									<button class="btn btn-success" type="submit">Actualizar datos</button>
 								</div>
 							</div>
+							{% endif %}
+						
 						</div>
 					</div>
                 </div>
@@ -169,166 +244,5 @@
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 <!--<script src="/static/assets/js/setting-demo.js"></script> -->
 <!--<script src="/static/assets/js/demo.js"></script> -->
-<script src="/static/assets/js/setting-demo2.js"></script>
-	<script>
-		Circles.create({
-			id:'circles-1',
-			radius:45,
-			value:60,
-			maxValue:100,
-			width:7,
-			text: 5,
-			colors:['#f1f1f1', '#FF9E27'],
-			duration:400,
-			wrpClass:'circles-wrp',
-			textClass:'circles-text',
-			styleWrapper:true,
-			styleText:true
-		})
-
-		Circles.create({
-			id:'circles-2',
-			radius:45,
-			value:70,
-			maxValue:100,
-			width:7,
-			text: 36,
-			colors:['#f1f1f1', '#2BB930'],
-			duration:400,
-			wrpClass:'circles-wrp',
-			textClass:'circles-text',
-			styleWrapper:true,
-			styleText:true
-		})
-
-		Circles.create({
-			id:'circles-3',
-			radius:45,
-			value:40,
-			maxValue:100,
-			width:7,
-			text: 12,
-			colors:['#f1f1f1', '#F25961'],
-			duration:400,
-			wrpClass:'circles-wrp',
-			textClass:'circles-text',
-			styleWrapper:true,
-			styleText:true
-		})
-
-		Circles.create({
-			id:'circles-4',
-			radius:45,
-			value:70,
-			maxValue:100,
-			width:7,
-			text: 20,
-			colors:['#f1f1f1', '#2BB930'],
-			duration:400,
-			wrpClass:'circles-wrp',
-			textClass:'circles-text',
-			styleWrapper:true,
-			styleText:true
-		})
-
-
-		$('#lineChart').sparkline([105,103,123,100,95,105,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: '#ffa534',
-			fillColor: 'rgba(255, 165, 52, .14)'
-		});
-
-	//CODIGO PROPIO PARA GRAFICAS
-
-		var lineChart = document.getElementById('lineChart').getContext('2d'),
-		//barChart = document.getElementById('barChart').getContext('2d'),
-		pieChart = document.getElementById('pieChart').getContext('2d');
-
-		var myLineChart = new Chart(lineChart, {
-			type: 'line',
-			data: {
-				labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-				datasets: [{
-					label: "Active Users",
-					borderColor: "#1d7af3",
-					pointBorderColor: "#FFF",
-					pointBackgroundColor: "#1d7af3",
-					pointBorderWidth: 2,
-					pointHoverRadius: 4,
-					pointHoverBorderWidth: 1,
-					pointRadius: 4,
-					backgroundColor: 'transparent',
-					fill: true,
-					borderWidth: 2,
-					data: [542, 480, 430, 550, 530, 453, 380, 434, 568, 610, 700, 900]
-				}]
-			},
-			options : {
-				responsive: true, 
-				maintainAspectRatio: false,
-				legend: {
-					position: 'bottom',
-					labels : {
-						padding: 10,
-						fontColor: '#1d7af3',
-					}
-				},
-				tooltips: {
-					bodySpacing: 4,
-					mode:"nearest",
-					intersect: 0,
-					position:"nearest",
-					xPadding:10,
-					yPadding:10,
-					caretPadding:10
-				},
-				layout:{
-					padding:{left:15,right:15,top:15,bottom:15}
-				}
-			}
-		});
-		var myPieChart = new Chart(pieChart, {
-			type: 'pie',
-			data: {
-				datasets: [{
-					data: [50, 35, 15],
-					backgroundColor :["#1d7af3","#f3545d","#fdaf4b"],
-					borderWidth: 0
-				}],
-				labels: ['New Visitors', 'Subscribers', 'Active Users'] 
-			},
-			options : {
-				responsive: true, 
-				maintainAspectRatio: false,
-				legend: {
-					position : 'bottom',
-					labels : {
-						fontColor: 'rgb(154, 154, 154)',
-						fontSize: 11,
-						usePointStyle : true,
-						padding: 20
-					}
-				},
-				pieceLabel: {
-					render: 'percentage',
-					fontColor: 'white',
-					fontSize: 14,
-				},
-				tooltips: false,
-				layout: {
-					padding: {
-						left: 20,
-						right: 20,
-						top: 20,
-						bottom: 20
-					}
-				}
-			}
-		})
-
-	</script>
 
 {% endblock javascripts %}

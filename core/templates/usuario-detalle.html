@@ -1,9 +1,9 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Usuario {% endblock %} 
+{% block title %} {{usuario.username}} {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{{usuario.firstname}} {% endblock stylesheets %}
+{% block stylesheets %} {% endblock stylesheets %}
 
 {% block content %}
 			
@@ -93,7 +93,15 @@
                                                 <div class="row mt-2">
                                                     <div class=" col-sm-12 col-md-6">
                                                         <p>Rol:</p>
-                                                        <p  style="font-size:1rem; color: aliceblue;">{{roles.name|capfirst}} </p>
+                                                        
+                                                        <p  style="font-size:1rem; color: aliceblue;"> 
+                                                            {% if roles != None %}
+                                                                {{roles.name|capfirst}}
+                                                            {% else %}
+                                                                SIN ASIGNAR
+                                                            {% endif %} 
+                                                        </p>
+       
                                                     </div>
                                                 </div>
                                                 <div class="row mt-2">
@@ -113,14 +121,20 @@
                                                 <div class="row mt-3">
                                                     <div class=" col-sm-12 col-md-6">
                                                         <p>Estado de la cuenta:</p>
+
                                                         {% if request.user.is_staff %}
-                                                        <div class="form-group p-0 w-auto">                 
+                                                        <div class="form-group p-0 w-auto">               
                                                             <div class="input-group">
+                                                                <p class="rounded p-1 mr-4 {% if usuario.is_active == True %} bg-success {% else %} bg-danger  {% endif %} " style="font-size:.8rem; color: aliceblue; width:max-content">
+                                                                    {% if usuario.is_active == True %} VERIFICADO {% else %} DESHABILITADO {%endif%}
+                                                                </p>
+                                                             
                                                                 <select class="form-control btn btn-primary dropdown-toggle" id="estado" name="estado">
-                                                                    <option class="dropdown-item" >Estado </option> 
+                                                                    <option class="dropdown-item" >Cambiar </option> 
                                                                         <option class="dropdown-item" value="True"> Verificado </option>
                                                                         <option class="dropdown-item" value="False"> Deshabilitado <option>
-                                                                    </select>
+                                                                </select>
+                                                                
                                                             </div>
                                                         </div>
                                                         {% else %}
@@ -157,8 +171,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                {% if request.user.id == usuario.id %}
-                                <div class="row mt-5 mb-5">
+                                {% if request.user.id == usuario.id or request.user.is_staff %}
+                                <div class="row mt-2 mb-5 pl-4">
                                     <div class="col-12">
                                         <button class="btn btn-success" type="submit">Actualizar datos</button>
                                     </div>

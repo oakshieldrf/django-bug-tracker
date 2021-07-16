@@ -13,14 +13,30 @@ from django.utils import timezone
 from django.contrib import messages
 
 
+
+
 @login_required(login_url="/login/")
 def index(request):
+
+    incidencias = Incidencia.objects.all()
+    ultimasIncidencias = Incidencia.objects.all()[:4]
+    equipos = Equipo.objects.all()
+    usuarios = User.objects.all()
+    print('XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD')
+    print(equipos)
     
+
     context = {}
     context['segment'] = 'index'
+    context['incidencias'] = incidencias 
+    context['ultimasIncidencias'] = ultimasIncidencias
+    context['equipos'] = equipos 
+    context['usuarios'] = usuarios 
+
 
     html_template = loader.get_template( 'index.html' )
     return HttpResponse(html_template.render(context, request))
+
 
 @login_required(login_url="/login/")
 def pages(request):
@@ -50,15 +66,11 @@ def pages(request):
 
 class IncidenciasView(View):
 
-
     def get(self, request):
 
         listaIncidencias = Incidencia.objects.all()
         equipos = Equipo.objects.all()
         responsables = User.objects.all()
-        for user in responsables: 
-            print(user.first_name)
-        print(listaIncidencias)
 
         context = {}
         context['segment'] = 'index'
@@ -69,7 +81,6 @@ class IncidenciasView(View):
         html_template = loader.get_template( 'incidencias.html')
         return HttpResponse(html_template.render(context, request))
 
-       
 ### Crea una incidencia
     def post(self, request): 
 
@@ -117,6 +128,9 @@ class IncidenciaDetalleView(View):
         equipos = Equipo.objects.filter().exclude(id=incidencia.equipo.id)
         responsables = User.objects.filter().exclude(id=incidencia.responsables.id)
         grado = Incidencia.GRADO_CHOICES
+        userIsResponsable = True if incidencia.responsables == request.user else False
+        print('==========================================')
+        print(userIsResponsable)
 
         print(incidencia)
         context = {}
@@ -124,7 +138,8 @@ class IncidenciaDetalleView(View):
         context['incidencia'] = incidencia
         context['equipos'] = equipos
         context['responsables'] = responsables
-        context['grado'] = grado 
+        context['grado'] = grado
+        context['isResponsable']  = userIsResponsable
  
 
         html_template = loader.get_template( 'incidencia-detalle.html' )
@@ -147,6 +162,7 @@ class IncidenciaDetalleView(View):
         incidencia.descripcion = dataUpdate['descripcion']
         incidencia.tipo = dataUpdate['tipo']
         incidencia.fechaModificacion = timezone.now()
+        incidencia.horasEstimadas = dataUpdate['horas']
 
         incidencia.save()
 
@@ -186,16 +202,17 @@ class EquiposView(View):
             nombre = cd['nombre']
             descripcion = cd['descripcion']
             miembros_id = cd['miembros']
-            print(miembros_id)
             miembros = User.objects.get(pk=miembros_id)
 
             equipoNuevo = Equipo()
             equipoNuevo.nombre = nombre 
             equipoNuevo.fechaCreacion = timezone.now()
-            equipoNuevo.miembros = miembros
             equipoNuevo.descripcion = descripcion
 
             equipoNuevo.save()
+            equipoNuevo.miembros.add(miembros)
+            equipoNuevo.save()
+            
             messages.success(request, 'Se ha creado un equipo nuevo')
 
             return self.get(request)
@@ -217,7 +234,7 @@ class EquipoDetailView(View):
 
         equipo = Equipo.objects.get(pk=id)
         incidencias = Incidencia.objects.filter(equipo=equipo)
-        miembros = equipo.miembros
+        miembros = equipo.miembros.all()
         
         context = {}
         context['segment'] = 'index'
@@ -252,10 +269,6 @@ class EquipoDetailView(View):
 
 class UsuariosView(View):
 
-    lista_usuarios = User.objects.all()
-
-    context = {}
-
     def get(self, request):
 
         context = {}
@@ -273,7 +286,6 @@ class UsuariosView(View):
 
 class UsuarioDetailView(View):
 
-
     def get(self, request, id):
 
         context = {}
@@ -281,7 +293,7 @@ class UsuarioDetailView(View):
         usuario = User.objects.get(pk=id)
         context['usuario'] = usuario
         roles = usuario.groups.all()
-        context['roles'] = roles[0]
+        context['roles'] = roles[0] if roles else None
         context['equipos'] = Equipo.objects.filter(miembros__id = id)
         context['userextend'] = UserExtend.objects.get(user__id=id)
 
@@ -300,3 +312,4 @@ class UsuarioDetailView(View):
         usuario.save()
 
         return self.get(request,id)
+

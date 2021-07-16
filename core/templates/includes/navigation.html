@@ -4,8 +4,8 @@
 			<!-- Logo Header -->
 			<div class="logo-header" data-background-color="dark2">
 				
-				<a href="/" class="logo">
-					<img src="/static/assets/img/logo.svg" alt="navbar brand" class="navbar-brand">
+				<a href="/" class="logo text-white">
+					BUG TRACKER
 				</a>
 				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon">
@@ -47,13 +47,8 @@
 							  <a class="nav-link" href="{% url 'app:equipos_list' %}">Equipos</a>
 							</li>
 							<li class="nav-item pl-3 pr-3">
-							  <a class="nav-link" href="{% url 'app:usuarios_list' %}">
-								Usuarios
-							  </a>
+							  <a class="nav-link" href="{% url 'app:usuarios_list' %}">Usuarios</a>
 							</li>
-							<li class="nav-item pl-3 pr-3">
-								<a class="nav-link" href="#" tabindex="-1">Configuración</a>
-							  </li>
 						  </ul>
 					</div>
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
@@ -264,19 +259,12 @@
 												<p class="text-muted">
 													{{ request.user.email }}
 												</p>
-												<a href="#" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+												<a href="{% url 'app:usuario_detalle' request.user.id %}" class="btn btn-xs btn-secondary btn-sm">Ver Perfil</a>
 											</div>
 										</div>
 									</li>
 									<li>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="#">My Profile</a>
-										<a class="dropdown-item" href="#">My Balance</a>
-										<a class="dropdown-item" href="#">Inbox</a>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="#">Account Setting</a>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+										<a class="dropdown-item" href="{% url 'logout' %}">Salir</a>
 									</li>
 								</div>
 							</ul>

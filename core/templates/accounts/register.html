@@ -1,7 +1,7 @@
 
 {% extends "layouts/base.html" %}
 
-{% block title %} Login {% endblock title %}
+{% block title %} Registro de usuarios {% endblock title %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -10,7 +10,7 @@
 
     <div class="page-inner">
         <div class="page-header">
-            <h4 class="page-title">Register</h4>
+            <h4 class="page-title">Registro</h4>
             <ul class="breadcrumbs">
                 <li class="nav-home">
                     <a href="#">
@@ -21,13 +21,13 @@
                     <i class="flaticon-right-arrow"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">Authentication</a>
+                    <a href="#">Autenticación</a>
                 </li>
                 <li class="separator">
                     <i class="flaticon-right-arrow"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">Register</a>
+                    <a href="#">Registro</a>
                 </li>
             </ul>
         </div>
@@ -38,7 +38,7 @@
                         <div class="card-title">
 
                             {% if msg %}
-                                <span class="text-danger">{{ msg | safe }}</span>
+                                <span class="{% if success == False %} text-danger {% else %} text-success  {% endif %} ">{{ msg | safe }}</span>
                             {% else %}
                             <span>
                                 Regístrate

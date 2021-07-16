@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Dashboard {% endblock %} 
+{% block title %} Incidencias {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -26,7 +26,7 @@
 					
 					{% if messages %}
 						{% for message in messages %}
-							<li class="text-{{message.tags}} ml-4" style="font-size:2rem!importat; "><h5>{{message}}</h5></li>
+							<li class="{% if message.tags == 'error' %} text-danger {% else %} text-success {% endif %}  ml-4" style="font-size:2rem!important; "><h5>{{message}}</h5></li>
 						{% endfor %}
 					{% endif %}
 
@@ -130,10 +130,12 @@
 													</div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-sm-12 mt-4">
-                                                        <div class="form-group">
-															<label> Horas estimadas:</label>
-															<input id="horas" name="horas" type="time" class="form-control" required>
+                                                    <div class="col-6 mt-4">
+                                                        <div class="form-group form-group-default">
+															<label> Horas estimadas:</label>          
+															<div class="input-group">
+																<input type="number" class="form-control" style="font-size:1rem;" required name="horas" id="horas" step="1.00" min="0">
+															</div>
 														</div>
                                                     </div>
                                                 </div> 
@@ -148,50 +150,7 @@
 								</div>
 							</div>
 				<!-- LISTA DE INCIDENCIAS -->
-							<div class=" table-responsive table-hover">
-								<div id="add-row_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4"><div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="add-row_length"><label>Mostrar <select name="add-row_length" aria-controls="add-row" class="form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> elementos</label></div></div><div class="col-sm-12 col-md-6"><div id="add-row_filter" class="dataTables_filter"><label>Buscar:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="add-row"></label></div></div></div><div class="row"><div class="col-sm-12"><table id="add-row" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="add-row_info">
-									<thead>
-										<tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" style="width:8%;" aria-label="Name: activate to sort column descending" aria-sort="ascending">Grado</th><th class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" style="width:60%;" aria-label="Posicion: activate to sort column ascending">Position</th><th style="width:30%" class="sorting" tabindex="0" aria-controls="add-row" rowspan="1" colspan="1" aria-label="Action: activate to sort column ascending">Acciones</th></tr>
-									</thead>
-									<tbody>	
-										{% for incidencia in lista_incidentes%}
-											<tr role="row">
-												<td class="sorting_1">
-													<div class="mb-3">
-														<small>ID: <span>{{incidencia.id}}</span></small> 
-													</div>
-													<label class="colorinput">
-														<input name="color"  value="primary" data-toggle="tooltip" data-original-title="Estado" class="colorinput-input">
-														<span class="stamp stamp-md bg-danger mr-3">
-															{{incidencia.grado}}
-														</span>
-													</label>
-												</td>
-												<td>
-													<p>{{incidencia.titulo}}</p>
-													<p> <i class="fas fa-users"></i> <span> {{incidencia.equipo.nombre}}</span> </p>
-												</td>
-												<td>
-													<div class="form-button-action pt-3">
-														<label class="colorinput">
-															<input name="color"  value="primary" data-toggle="tooltip" data-original-title="Estado" class="colorinput-input">
-															<span class="stamp stamp-md bg-danger mr-3">
-																{{incidencia.estado|capfirst}}
-															</span>
-														</label>
-														<a href="/incidencia/{{incidencia.id}}" type="button" data-toggle="tooltip" title="" class="btn  btn-primary btn-sm" data-original-title="Ver incidencia">
-															<i class="far fa-eye"></i>
-														</a>
-													</div>
-													<div class="mt-2">
-														<p><small>{{incidencia.fechaCreacion}} </small></p> 
-													</div>
-												</td>
-										</tr>
-										{% endfor %}
-                                    </tbody>
-								</table></div></div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="add-row_info" role="status" aria-live="polite">Mostrando 1 - 5 de 20 elementos</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="add-row_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="add-row_previous"><a href="#" aria-controls="add-row" data-dt-idx="0" tabindex="0" class="page-link">Anterior</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="add-row" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="add-row" data-dt-idx="2" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="add-row" data-dt-idx="3" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item next" id="add-row_next"><a href="#" aria-controls="add-row" data-dt-idx="4" tabindex="0" class="page-link">Siguiente</a></li></ul></div></div></div></div>
-							</div>
+							{% include 'layouts/lista-incidencias.html' %}
 						</div>
 					</div>
                 </div>
@@ -208,165 +167,5 @@
 <!--<script src="/static/assets/js/setting-demo.js"></script> -->
 <!--<script src="/static/assets/js/demo.js"></script> -->
 <script src="/static/assets/js/setting-demo2.js"></script>
-	<script>
-		Circles.create({
-			id:'circles-1',
-			radius:45,
-			value:60,
-			maxValue:100,
-			width:7,
-			text: 5,
-			colors:['#f1f1f1', '#FF9E27'],
-			duration:400,
-			wrpClass:'circles-wrp',
-			textClass:'circles-text',
-			styleWrapper:true,
-			styleText:true
-		})
-
-		Circles.create({
-			id:'circles-2',
-			radius:45,
-			value:70,
-			maxValue:100,
-			width:7,
-			text: 36,
-			colors:['#f1f1f1', '#2BB930'],
-			duration:400,
-			wrpClass:'circles-wrp',
-			textClass:'circles-text',
-			styleWrapper:true,
-			styleText:true
-		})
-
-		Circles.create({
-			id:'circles-3',
-			radius:45,
-			value:40,
-			maxValue:100,
-			width:7,
-			text: 12,
-			colors:['#f1f1f1', '#F25961'],
-			duration:400,
-			wrpClass:'circles-wrp',
-			textClass:'circles-text',
-			styleWrapper:true,
-			styleText:true
-		})
-
-		Circles.create({
-			id:'circles-4',
-			radius:45,
-			value:70,
-			maxValue:100,
-			width:7,
-			text: 20,
-			colors:['#f1f1f1', '#2BB930'],
-			duration:400,
-			wrpClass:'circles-wrp',
-			textClass:'circles-text',
-			styleWrapper:true,
-			styleText:true
-		})
-
-
-		$('#lineChart').sparkline([105,103,123,100,95,105,115], {
-			type: 'line',
-			height: '70',
-			width: '100%',
-			lineWidth: '2',
-			lineColor: '#ffa534',
-			fillColor: 'rgba(255, 165, 52, .14)'
-		});
-
-	//CODIGO PROPIO PARA GRAFICAS
-
-		var lineChart = document.getElementById('lineChart').getContext('2d'),
-		//barChart = document.getElementById('barChart').getContext('2d'),
-		pieChart = document.getElementById('pieChart').getContext('2d');
-
-		var myLineChart = new Chart(lineChart, {
-			type: 'line',
-			data: {
-				labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-				datasets: [{
-					label: "Active Users",
-					borderColor: "#1d7af3",
-					pointBorderColor: "#FFF",
-					pointBackgroundColor: "#1d7af3",
-					pointBorderWidth: 2,
-					pointHoverRadius: 4,
-					pointHoverBorderWidth: 1,
-					pointRadius: 4,
-					backgroundColor: 'transparent',
-					fill: true,
-					borderWidth: 2,
-					data: [542, 480, 430, 550, 530, 453, 380, 434, 568, 610, 700, 900]
-				}]
-			},
-			options : {
-				responsive: true, 
-				maintainAspectRatio: false,
-				legend: {
-					position: 'bottom',
-					labels : {
-						padding: 10,
-						fontColor: '#1d7af3',
-					}
-				},
-				tooltips: {
-					bodySpacing: 4,
-					mode:"nearest",
-					intersect: 0,
-					position:"nearest",
-					xPadding:10,
-					yPadding:10,
-					caretPadding:10
-				},
-				layout:{
-					padding:{left:15,right:15,top:15,bottom:15}
-				}
-			}
-		});
-		var myPieChart = new Chart(pieChart, {
-			type: 'pie',
-			data: {
-				datasets: [{
-					data: [50, 35, 15],
-					backgroundColor :["#1d7af3","#f3545d","#fdaf4b"],
-					borderWidth: 0
-				}],
-				labels: ['New Visitors', 'Subscribers', 'Active Users'] 
-			},
-			options : {
-				responsive: true, 
-				maintainAspectRatio: false,
-				legend: {
-					position : 'bottom',
-					labels : {
-						fontColor: 'rgb(154, 154, 154)',
-						fontSize: 11,
-						usePointStyle : true,
-						padding: 20
-					}
-				},
-				pieceLabel: {
-					render: 'percentage',
-					fontColor: 'white',
-					fontSize: 14,
-				},
-				tooltips: false,
-				layout: {
-					padding: {
-						left: 20,
-						right: 20,
-						top: 20,
-						bottom: 20
-					}
-				}
-			}
-		})
-
-	</script>
 
 {% endblock javascripts %}

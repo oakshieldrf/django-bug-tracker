@@ -44,7 +44,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'core.urls'
 LOGIN_REDIRECT_URL = "home"   # Ruta definida en app/urls.py
-LOGOUT_REDIRECT_URL = "home"  # Ruta definida en app/urls.py
+LOGOUT_REDIRECT_URL = "app:home"  # Ruta definida en app/urls.py
 TEMPLATE_DIR = os.path.join(CORE_DIR, "core/templates")  # ROOT dir for templates
 
 TEMPLATES = [
@@ -103,7 +103,7 @@ TIME_ZONE = 'America/Mexico_City'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 

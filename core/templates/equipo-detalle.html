@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Dashboard {% endblock %} 
+{% block title %} {{equipo.nombre }} {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -37,6 +37,7 @@
 					{% endif %}
                 </ul>
             </div>
+    <!----------------- INFORMACION DEL EQUIPO -------------------->
             <div class="row mt-5">
                 <div class="col-md-12">
                     <div class="card">
@@ -57,12 +58,18 @@
                                                     <div class=" col-sm-3 col-md-2">
                                                         <p>Nombre:</p>
                                                     </div>
+                                                    {% if request.user.is_staff %}
                                                     <div class="col-sm-9 col-lg-5">
                                                         <div class="form-group form-floating-label pt-0">
                                                             <input id="inputFloatingLabel" type="text" class="form-control input-border-bottom pt-0" style="font-size:1rem;" required name="nombre" id="nombre" value="{{equipo.nombre}}">
                                                             <label for="inputFloatingLabel" class="placeholder" ></label>
                                                         </div>
                                                     </div>
+                                                    {% else %}
+                                                    <div class="col-sm-10 col-md-6">
+                                                        <p style="font-size:1rem;" class="text-white">{{equipo.nombre}}</p>
+                                                    </div>
+                                                    {% endif %}
                                                 </div>
                                                 <div class="row">
                                                     <div class=" col-sm-3 col-md-2">
@@ -79,7 +86,7 @@
                                                         <p>Fecha de creación:</p>
                                                     </div>
                                                     <div class="col-sm-9 col-lg-5">
-                                                        <p class="font-weight-bold">{{equipo.fechaCreacion}} </p>
+                                                        <p class="font-weight-bold text-white ">{{equipo.fechaCreacion}} </p>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -88,9 +95,9 @@
                                                     </div>
                                                     <div class="col-sm-4 col-lg-2 pr-1">
                                                         {% if equipo.horasTrabajo != None %}
-                                                            <p class="font-weight-bold">{{equipo.horasTrabajo}}</p>
+                                                            <p class="font-weight-bold text-white">{{equipo.horasTrabajo}}</p>
                                                         {% else %}
-                                                            <p class="font-weight-bold">Aún no hay horas registradas</p>
+                                                            <p class="font-weight-bold text-white">Aún no hay horas registradas</p>
                                                         {% endif %}
                                                     </div>
                                                 </div>
@@ -98,44 +105,31 @@
                                         </div>
                                     </div>
                                 </div>
+                                {% if request.user.is_staff %}
                                 <div class="row mt-5 mb-5">
                                     <div class="col-12">
                                         <button class="btn btn-success" type="submit">Actualizar datos</button>
                                     </div>
                                 </div>
+                                {% endif %}
                             </form>	
                         </div>
                     </div>
                 </div>
             </div>
-        <!------ SECCION INCIDENCIAS ASIGNADAS ------->
+    <!---------- SECCION MIEMBROS DE EQUIPO ---------->
             <div class="row mt-4">
                 <div class="col-md-12">
                     <div class="card">
-						<div class="card-body">
-                <!-- LISTA DE INCIDENCIAS -->
-                            {% if lista_incidentes %}
-                                {% include "layouts/lista-incidencias.html" %} 
-                            {% else %}
-                                <h4 class="font-weight-bold">Este equipo todavia no tiene incidencias asignadas</h4>
-                            {% endif %}
-						</div>
-					</div>
-                </div>
-            </div>
-        <!---- SECCION MIEMBROS DE EQUIPO ------>
-            <div class="row mt-4">
-                <div class="col-md-12">
-                    <div class="card">
-						<div class="card-body">
-                           <div class="card-header">
+                        <div class="card-body">
+                        <div class="card-header">
                                 <div class="d-flex align-items-center">
                                     <h4 class="card-title">Miembros</h4>
                                 </div>
-                           </div>
-                          
-                           {% if miembros %}
-                           <div class="col-sm-12">
+                        </div>
+                        
+                        {% if miembros %}
+                        <div class="col-sm-12">
                                 <table id="basic-datatables" class="display table table-striped table-responsive table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                     <thead>
                                         <tr role="row">
@@ -146,32 +140,33 @@
                                         <th class="sorting" tabindex="0" aria-controls="basic-datatables" rowspan="1" colspan="1" style="width:25%" aria-label="Acciones: activate to sort column ascending">Acciones</th>
                                         </tr>
                                     </thead>
-                                    <tbody>									
+                                    <tbody>
+                                        {% for miembro in miembros %}									
                                         <tr role="row" class="odd">
-                                            <td class="sorting_1">{{miembros.username}}</td>
-                                            <td>{{miembros.email}} </td>
+                                            <td class="sorting_1">{{miembro.username}}</td>
+                                            <td>{{miembro.email}} </td>
                                             <td>
                                                 <div class="form-group p-0">                 
                                                     <div class="input-group">
                                                         <p class="text-white text-center  bg-warning p-1" style="width: max-content;"> 
-                                                           {{miembros.groups.name}} </p> 
+                                                        {{miembro.groups.name}} </p> 
                                                     
                                                     </div>
                                                 </div>
                                             </td>
                                             <td>     
                                                 <div class="pt-2">
-                                                    <p class="text-white text-center  {%if miembros.is_active%} bg-success {% else %} bg-danger {% endif %} p-1" style="width: max-content;"> 
-                                                        {% if miembros.is_active %} VERIFICADO {% else %} NO VERIFICADO {% endif %}</p> 
+                                                    <p class="text-white text-center  {%if miembro.is_active%} bg-success {% else %} bg-danger {% endif %} p-1" style="width: max-content;"> 
+                                                        {% if miembro.is_active %} VERIFICADO {% else %} NO VERIFICADO {% endif %}</p> 
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="form-button-action pt-3">
-                                                    <a href="#" type="button" data-toggle="tooltip" title="" class="btn  btn-primary btn-sm" data-original-title="Ver usuario">
+                                                    <a href="{% url 'app:usuario_detalle' miembro.id %} " type="button" data-toggle="tooltip" title="" class="btn  btn-primary btn-sm" data-original-title="Ver usuario">
                                                         <i class="far fa-eye" style="font-size:1rem;"></i>
                                                     </a>
                                                 </div>
-                                                {% if request.user.groups == 'scrum master' %}
+                                                {% if request.user.is_staff %}
                                                 <div class="form-button-action pt-3">
                                                     <a href="#" type="button" data-toggle="tooltip" title="" class="btn  btn-danger btn-sm" data-original-title="Remover del equipo">
                                                         <i class="fas fa-times" style="font-size:1rem;"></i>
@@ -180,14 +175,35 @@
                                                 {% endif %}
                                             </td>
                                         </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
-                           </div>
-                           {% else %}
+                        </div>
+                        {% else %}
                             <div class="col-12">
                                 <h4 class="font-weight-bold" >Este equipo todavia no tiene miembros asignados</h4>
                             </div> 
-                           {% endif %}
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+    <!--------- SECCION INCIDENCIAS ASIGNADAS ---------->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+							<div class="d-flex align-items-center">
+								<h4 class="card-title">Lista de Incidencias</h4>
+							</div>
+						</div>
+						<div class="card-body">
+                <!-- LISTA DE INCIDENCIAS -->
+                            {% if lista_incidentes %}
+                                {% include "layouts/lista-incidencias.html" %} 
+                            {% else %}
+                                <h4 class="font-weight-bold">Este equipo todavia no tiene incidencias asignadas</h4>
+                            {% endif %}
 						</div>
 					</div>
                 </div>

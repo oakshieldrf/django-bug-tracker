@@ -23,13 +23,13 @@
 							<div class="collapse in" id="collapseExample">
 								<ul class="nav">
 									<li>
-										<a href="#profile">
-											<span class="link-collapse">My Profile</span>
+										<a href="{% url 'app:usuario_detalle' request.user.id %} ">
+											<span class="link-collapse">Mi perfil</span>
 										</a>
 									</li>
 									<li>
 										<a href="{% url 'logout' %}">
-											<span class="link-collapse">Logout</span>
+											<span class="link-collapse">Cerrar sesión</span>
 										</a>
 									</li>
 								</ul>

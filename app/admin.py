@@ -7,7 +7,7 @@ from .models import Equipo, Incidencia
 
 @admin.register(Equipo)
 class EquipoAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'fechaCreacion', 'descripcion', 'miembros' )
+    list_display = ('nombre', 'fechaCreacion', 'descripcion' )
     search_fields = ('miembros',)
 
 @admin.register(Incidencia)

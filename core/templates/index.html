@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Dashboard {% endblock %} 
+{% block title %} Menú Principal {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -13,44 +13,91 @@
 				<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 					<div>
 						<h2 class="text-white pb-2 fw-bold">Menú principal</h2>
-						<h5 class="text-white op-7 mb-2">Sistema de incidencias con Django 3</h5>
+						<h5 class="text-white op-7 mb-2">Sistema de Seguimiento incidencias con Django 3</h5>
 					</div>
 					<div class="ml-md-auto py-2 py-md-0">
-						<!--<a href="#" class="btn btn-white btn-border btn-round mr-2">Manage</a>
-						<a href="#" class="btn btn-secondary btn-round">Add Customer</a>-->
 					</div>
 				</div>
 			</div>
 		</div>
+
 		<div class="page-inner mt--5">
+<!-------- SECCION ESTADISTICAS GENERALES ---------->
 			<div class="row mt--2">
 				<div class="col-md-12">
 					<div class="card full-height">
 						<div class="card-body">
-							<div class="card-title">Overall statistics</div>
-							<div class="card-category">Daily information about statistics in system</div>
+							<div class="card-title">Estadísticas generales</div>
+							<div class="card-category">Informacion sobre toda actividad del sistema</div>
 							<div class="d-flex flex-wrap justify-content-around pb-2 pt-4">
 								<div class="px-2 pb-2 pb-md-0 text-center">
 									<div id="circles-1"></div>
-									<h6 class="fw-bold mt-3 mb-0">New Users</h6>
+									<h6 class="fw-bold mt-3 mb-0">Nuevas incidencias</h6>
 								</div>
 								<div class="px-2 pb-2 pb-md-0 text-center">
 									<div id="circles-2"></div>
-									<h6 class="fw-bold mt-3 mb-0">Sales</h6>
+									<h6 class="fw-bold mt-3 mb-0">Incidencias registradas</h6>
 								</div>
 								<div class="px-2 pb-2 pb-md-0 text-center">
 									<div id="circles-3"></div>
-									<h6 class="fw-bold mt-3 mb-0">Subscribers</h6>
+									<h6 class="fw-bold mt-3 mb-0">Equipos registrados</h6>
 								</div>
 								<div class="px-2 pb-2 pb-md-0 text-center">
 									<div id="circles-4"></div>
-									<h6 class="fw-bold mt-3 mb-0">Pipipopo</h6>
+									<h6 class="fw-bold mt-3 mb-0">Miembros registrados</h6>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+			</div>
+<!-------- SECCION ULTIMAS INCIDENCIAS ---------->
+			<div class="row">
+				<div class="col-12 col-md-12">
+					<div class="card full-height">
+						<div class="card-header">
+							<div class="card-head-row">
+								<div class="card-title">Últimas incidencias</div>
+							</div>
+						</div>
+						<div class="card-body">
+							{% for incidencia in ultimasIncidencias %}
+							<div class="d-flex">
+								<label class="colorinput">
+									<input name="color"  value="primary" data-toggle="tooltip" data-original-title="{{incidencia.get_grado_display}} " class="colorinput-input">
+									<span class="stamp stamp-md	mr-3
+										{% if incidencia.grado == 'P1' %} bg-danger 
+										{% elif  incidencia.grado == 'P2'  %} bg-warning
+										{% elif  incidencia.grado == 'P3'  %} bg-info
+										{% elif  incidencia.grado == 'P4'  %} bg-secondary
+										{% elif  incidencia.grado == 'P5'  %} bg-success
+										{% endif %}
+									">
+										{{incidencia.grado}}
+									</span>
+								</label>
+								<div class="flex-1 ml-3 pt-1">
+									<h6 class="text-uppercase fw-bold mb-1">{{incidencia.titulo}} <span class="
+										{% if incidencia.estado == 'abierto' %} text-success 
+										{% elif incidencia.estado == 'resuelto' %} text-primary
+										{% elif incidencia.estado == 'cerrado' %} text-warning
+										{% elif incidencia.estado == 'eliminado' %} text-danger
+										{% endif %}
+										pl-3">{{incidencia.estado}} </span></h6>
+									<span class="text-muted">{{incidencia.descripcion}} </span>
+								</div>
+								<div class="float-right pt-1">
+									<small class="text-muted">{{incidencia.fechaCreacion}} </small>
+								</div>
+							</div>
+							<div class="separator-dashed"></div>
+							{% endfor %}
+							<a href="{% url 'app:incidencias_list' %}" class="btn btn-secondary text-white mt-3">Ver incidencias</a hrf="{% url 'app:incidencias_list' %}">
+						</div>
+					</div>
+				</div>
 			</div>	
+<!-------- SECCION GRAFICAS ---------->
 			<div class="row">
 				<div class="col-md-6">
 					<div class="card">
@@ -96,7 +143,7 @@
 			value:60,
 			maxValue:100,
 			width:7,
-			text: 5,
+			text: {{ultimasIncidencias.count}} ,
 			colors:['#f1f1f1', '#FF9E27'],
 			duration:400,
 			wrpClass:'circles-wrp',
@@ -111,7 +158,7 @@
 			value:70,
 			maxValue:100,
 			width:7,
-			text: 36,
+			text: {{incidencias.count}} ,
 			colors:['#f1f1f1', '#2BB930'],
 			duration:400,
 			wrpClass:'circles-wrp',
@@ -126,7 +173,7 @@
 			value:40,
 			maxValue:100,
 			width:7,
-			text: 12,
+			text: {{equipos.count}},
 			colors:['#f1f1f1', '#F25961'],
 			duration:400,
 			wrpClass:'circles-wrp',
@@ -141,7 +188,7 @@
 			value:70,
 			maxValue:100,
 			width:7,
-			text: 20,
+			text: {{usuarios.count}},
 			colors:['#f1f1f1', '#2BB930'],
 			duration:400,
 			wrpClass:'circles-wrp',

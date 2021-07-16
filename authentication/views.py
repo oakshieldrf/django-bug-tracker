@@ -12,6 +12,8 @@ from django.http import HttpResponse
 from .forms import LoginForm, SignUpForm
 from .models import UserExtend
 import datetime
+from django.contrib.auth.decorators import login_required
+
 
 def login_view(request):
     form = LoginForm(request.POST or None)
@@ -34,6 +36,7 @@ def login_view(request):
 
     return render(request, "accounts/login.html", {"form": form, "msg" : msg})
 
+
 def register_user(request):
 
     msg     = None
@@ -55,10 +58,10 @@ def register_user(request):
             new_profile.ultimoUpdate = fh_string
             new_profile.user.groups.add(Group.objects.get(name='desarrollador')) 
 
-            msg     = 'Usuario creado - por favor <a href="/login">Inicia sesión</a>.'
+            msg     = 'Usuario creado - Por favor <a href="/login" class="font-weight-bold">Inicia sesión</a>.'
             success = True
             
-            return redirect("/login")
+            #return redirect("/login", {"msg" : msg, "success" : success })
 
         else:
             msg = 'El formulario no es válido'    

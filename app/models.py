@@ -13,10 +13,13 @@ class Equipo(models.Model):
     
     nombre = models.CharField(max_length=50)
     fechaCreacion = models.DateTimeField(auto_now_add=True)
-    miembros = models.ForeignKey(User, on_delete=models.CASCADE,  related_name="equipo_miembros")
-    #proyectos = models
+    miembros = models.ManyToManyField(User,  related_name="equipo_miembros")
     descripcion = models.TextField(max_length=200)
-    horasTrabajo = models.TimeField(auto_now=False, auto_now_add=False, null=True)
+    horasTrabajo = models.DecimalField(blank=True, null=True, default=0, decimal_places=2, max_digits=6)
+
+    #Devuelve el nombre en lugar de object
+    def __str__(self):
+        return self.nombre
 
 
 #Modelo para incidencias
@@ -52,4 +55,11 @@ class Incidencia(models.Model):
     responsables = models.ForeignKey(User, on_delete=models.CASCADE,  related_name="incidencia_responsables")
     equipo = models.ForeignKey(Equipo, on_delete=models.CASCADE, related_name='equipo_incidencias', default=None ) 
     grado = models.CharField(max_length=20, choices = GRADO_CHOICES, default='P5')
-    horasEstimadas = models.TimeField(auto_now=False, auto_now_add=False)
+    horasEstimadas = models.DecimalField(blank=True, null=True, default=0, decimal_places=2, max_digits=6)
+
+        #Devuelve el nombre en lugar de object
+    def __str__(self):
+        return self.titulo
+
+    class Meta:
+        ordering = ('-fechaCreacion',) #Ordenar en orden ascendente

@@ -8,7 +8,7 @@ class IncidenciaForm(forms.Form):
     equipo = forms.CharField(widget=forms.Select)
     tipo = forms.CharField(widget=forms.Select)
     responsables = forms.CharField(widget=forms.Select)
-    horas = forms.TimeField()
+    horas = forms.DecimalField()
 
 
 
