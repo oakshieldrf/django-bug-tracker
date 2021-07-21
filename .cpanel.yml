@@ -1,5 +1,0 @@
----
-deployment:
-  tasks:
-    - export DEPLOYPATH=/home/example/public_html/bug-tracker.sophiaerternum.com
-    - /bin/cp -a * $DEPLOYPATH
