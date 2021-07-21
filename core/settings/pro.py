@@ -6,7 +6,7 @@ ADMINS = (
     ('admin', 'admin@mail.com'),
 )
 
-ALLOWED_HOSTS = ['bug-tracker.sophiaeternum.com', 'www.bug-tracker.sophiaeternum.com']
+ALLOWED_HOSTS = ['django-bug-tracker-stage.herokuapp.com']
 
 '''SECURE_CONTENT_TYPE_NOSNIFF  = True 
 SECURE_BROWSER_XSS_FILTER = True 
