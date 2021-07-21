@@ -17,3 +17,4 @@ class EquipoForm(forms.Form):
     descripcion = forms.CharField(widget=forms.Textarea)
     miembros = forms.CharField(widget=forms.Select)
     
+

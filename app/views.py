@@ -22,8 +22,6 @@ def index(request):
     ultimasIncidencias = Incidencia.objects.all()[:4]
     equipos = Equipo.objects.all()
     usuarios = User.objects.all()
-    print('XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD')
-    print(equipos)
     
 
     context = {}
@@ -129,10 +127,7 @@ class IncidenciaDetalleView(View):
         responsables = User.objects.filter().exclude(id=incidencia.responsables.id)
         grado = Incidencia.GRADO_CHOICES
         userIsResponsable = True if incidencia.responsables == request.user else False
-        print('==========================================')
-        print(userIsResponsable)
 
-        print(incidencia)
         context = {}
         context['segment'] = 'index'
         context['incidencia'] = incidencia
@@ -150,7 +145,6 @@ class IncidenciaDetalleView(View):
 
         incidencia = Incidencia.objects.get(pk=id)
         dataUpdate = request.POST
-        print(dataUpdate)
 
         incidencia.grado = dataUpdate['grado'] 
         incidencia.titulo = dataUpdate['nombre']
