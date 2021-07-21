@@ -26,4 +26,3 @@ staticfiles/*
 .vscode/symbols.json
 
 #keys
-secret_key.txt
