@@ -14,7 +14,8 @@ DEBUG = False
 SECRET_KEY = '23sc4D$!"sXa(=0Pkg._Homl4m)BasTh4rdiz&d$eLm88aLrv26'
 
 # load production server from .env
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('SERVER', default='127.0.0.1')]
+ALLOWED_HOSTS = ['django-bug-tracker-stage.herokuapp.com', 'django-bug-tracker.herokuapp.com']
+
 
 # Application definition
 
@@ -127,7 +128,7 @@ ADMINS = (
     ('admin', 'admin@mail.com'),
 )
 
-ALLOWED_HOSTS = ['django-bug-tracker-stage.herokuapp.com', 'django-bug-tracker.herokuapp.com']
+
 SECURE_CONTENT_TYPE_NOSNIFF  = True 
 SECURE_BROWSER_XSS_FILTER = True 
 SECURE_SSL_REDIRECT  =  True
