@@ -15,7 +15,6 @@ class Equipo(models.Model):
     fechaCreacion = models.DateTimeField(auto_now_add=True)
     miembros = models.ManyToManyField(User,  related_name="equipo_miembros")
     descripcion = models.TextField(max_length=200)
-    horasTrabajo = models.DecimalField(blank=True, null=True, default=0, decimal_places=2, max_digits=6)
 
     #Devuelve el nombre en lugar de object
     def __str__(self):
