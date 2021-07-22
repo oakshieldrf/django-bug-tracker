@@ -70,7 +70,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME'  : 'dclsuj9f8kc570',
         'HOST'  : 'ec2-18-207-95-219.compute-1.amazonaws.com',
         'PORT'  : '5432',
@@ -128,10 +128,4 @@ STATICFILES_DIRS = (
 )
 #############################################################
 #############################################################
-
-
-ADMINS = (
-    ('admin', 'admin@mail.com'),
-)
-
 
