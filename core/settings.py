@@ -4,12 +4,13 @@ import os
 from decouple import config
 from unipath import Path
 import dj_database_url
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).parent
 CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-DEBUG = True
+DEBUG = False
 
 SECRET_KEY = '23sc4D$!"sXa(=0Pkg._Homl4m)BasTh4rdiz&d$eLm88aLrv26'
 
@@ -131,3 +132,4 @@ ADMINS = (
     ('admin', 'admin@mail.com'),
 )
 
+django_heroku.settings(locals())
