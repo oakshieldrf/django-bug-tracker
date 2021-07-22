@@ -71,9 +71,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME'  : 'db_bug_tracker',
-        'USER'  : 'admin_bug_tracker',
-        'PASSWORD': 'frt%q!xD$p4',
+        'NAME'  : 'dclsuj9f8kc570',
+        'HOST'  : 'ec2-18-207-95-219.compute-1.amazonaws.com',
+        'PORT'  : '5432',
+        'USER'  : 'jwmjqzegaggfbp',
+        'PASSWORD': '64a9c00f315e1964daa57bbc7351753f2b6d3960f2dfa5ba1e80863017dfa508',
     }
     
 }
