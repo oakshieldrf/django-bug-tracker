@@ -13,7 +13,7 @@ CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG = False
 
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = '23sc4D$!"sXa(=0Pkg._Homl4m)BasTh4rdiz&d$eLm88aLrv26'
 
 # load production server from .env
 ALLOWED_HOSTS = ['django-bug-tracker-stage.herokuapp.com', 'django-bug-tracker.herokuapp.com',
@@ -36,13 +36,13 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
