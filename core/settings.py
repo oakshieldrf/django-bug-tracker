@@ -12,10 +12,12 @@ CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = False
 
-SECRET_KEY = '23sc4D$!"sXa(=0Pkg._Homl4m)BasTh4rdiz&d$eLm88aLrv26'
+
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # load production server from .env
-ALLOWED_HOSTS = ['django-bug-tracker-stage.herokuapp.com', 'django-bug-tracker.herokuapp.com']
+ALLOWED_HOSTS = ['django-bug-tracker-stage.herokuapp.com', 'django-bug-tracker.herokuapp.com',
+'127.0.0.1']
 
 
 # Application definition
@@ -29,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',  # app principal
     'authentication',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
@@ -69,16 +72,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME'  : 'dclsuj9f8kc570',
-        'HOST'  : 'ec2-18-207-95-219.compute-1.amazonaws.com',
-        'PORT'  : '5432',
-        'USER'  : 'jwmjqzegaggfbp',
-        'PASSWORD': '64a9c00f315e1964daa57bbc7351753f2b6d3960f2dfa5ba1e80863017dfa508',
-    }
+    'default': dj_database_url.config(default=config('DATABASE_URL' ))
     
 }
+
+
 
 
 # Password validation
@@ -129,3 +127,7 @@ STATICFILES_DIRS = (
 #############################################################
 #############################################################
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/' 
