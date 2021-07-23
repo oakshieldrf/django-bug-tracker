@@ -16,8 +16,7 @@ DEBUG = True
 SECRET_KEY = '23sc4D$!"sXa(=0Pkg._Homl4m)BasTh4rdiz&d$eLm88aLrv26'
 
 # load production server from .env
-ALLOWED_HOSTS = ['django-bug-tracker-stage.herokuapp.com', 'django-bug-tracker.herokuapp.com',
-'127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
