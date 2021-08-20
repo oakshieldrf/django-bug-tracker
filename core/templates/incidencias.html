@@ -77,7 +77,7 @@
 														<div class="form-group p-0">                 
                                                             <div class="input-group">
 																<select class="form-control btn btn-primary dropdown-toggle" id="grado" name="grado" required>
-																	<option class="dropdown-item" selected="selected" disabled>Grado</option>
+																	<option class="dropdown-item" selected="selected" value="" disabled>Grado</option>
 																	<option class="dropdown-item" value="P1" >P1 - Crítico</option>
 																	<option class="dropdown-item" value="P2">P2 - Alto</option>
 																	<option class="dropdown-item" value="P3">P3 - Moderado</option>
@@ -97,7 +97,7 @@
 														<div class="form-group p-0">                 
                                                             <div class="input-group">
 																<select class="form-control btn btn-primary dropdown-toggle" id="equipo" name="equipo" required>
-																	<option class="dropdown-item" selected="selected" disabled>Equipo</option>
+																	<option class="dropdown-item" selected="selected" value="" disabled>Equipo</option>
 																	{% for equipo in equipos %}
 																		<option class="dropdown-item" value="{{equipo.id}}" >{{equipo.nombre}}</option>
 																	{% endfor %}
@@ -109,7 +109,7 @@
 														<div class="form-group p-0">                 
                                                             <div class="input-group">
 																<select class="form-control btn btn-primary dropdown-toggle" id="tipo" name="tipo" required>
-																	<option class="dropdown-item" selected="selected" disabled>Tipo</option>
+																	<option class="dropdown-item" selected="selected" value=""  disabled>Tipo</option>
 																	<option class="dropdown-item" value="incidencia" >Incidencia</option>
 																	<option class="dropdown-item" value="mejora" >Mejora</option>												
 																</select>
@@ -120,7 +120,7 @@
 														<div class="form-group p-0">                 
                                                             <div class="input-group">
 																<select class="form-control btn btn-primary dropdown-toggle" id="responsables" name="responsables" required>
-																	<option class="dropdown-item" selected="selected" disabled>Responsables</option>
+																	<option class="dropdown-item" selected="selected" value=""  disabled>Responsables</option>
 																	{% for miembro in responsables %}
 																		<option class="dropdown-item" value="{{miembro.id}}" >{{miembro.username}} </option>
 																	{% endfor %}

@@ -18,7 +18,7 @@
 				<div class="form-group p-0 mt-4 mb-3">  
 					<div class="row">
 						<div class="col-sm-6 col-md-8">
-						{% if isResponsable or request.user.is_staff %}
+						{% if isResponsable or request.user.is_staff or request.user.id == incidencia.autor.id %}
 							<div class="input-group">
 								<select class="form-control btn 
 
@@ -59,7 +59,7 @@
                 <div class="d-flex flex-column ">
                     <small class="p-2">{{incidencia.fechaCreacion}}</small>
 					<div class="form-group form-floating-label mb-3">
-						{% if isResponsable or request.user.is_staff %}
+						{% if isResponsable or request.user.is_staff or request.user.id == incidencia.autor.id %}
 						<input id="inputFloatingLabel" type="text" class="form-control input-border-bottom" style="font-size:1.8rem;" required="" value="{{incidencia.titulo}}" name="nombre" id="nombre">
 						<label for="inputFloatingLabel" class="placeholder"></label>
 						{% else %}
@@ -68,7 +68,7 @@
 					</div>
                 </div>
                 <div class="w-50 d-flex flex-row-reverse">
-					{% if isResponsable or request.user.is_staff %}
+					{% if isResponsable or request.user.is_staff or request.user.id == incidencia.autor.id%}
 					<div class="form-group p-0">                 
 						<div class="input-group">
 							<select class="form-control btn btn-primary dropdown-toggle" id="estado" name="estado">
@@ -108,14 +108,22 @@
 							</div>
 						</div>
 						<div class="card-body">
+							<div class="row mb-4">
+                                <div class="col-md-2">
+                                    <p>Autor</p>
+                                </div>
+								<div class="col-sm-4 col-lg-2 mb-3">
+									<a href="{% url 'app:usuario_detalle' incidencia.autor.id %} " style="font-size:1rem;" >{{incidencia.autor}}</a>
+								</div>
+							</div>
                             <div class="row mb-4">
                                 <div class="col-md-2">
-                                    <p>Responsables</p>
+                                    <p>Responsable</p>
                                 </div>
                                 <div class="col-sm-4 col-lg-2 mb-3">
-									<a href="{% url 'app:usuario_detalle' incidencia.responsables.id %} " class="font-weight-bold" >{{incidencia.responsables}}</a>
+									<a href="{% url 'app:usuario_detalle' incidencia.responsables.id %} " style="font-size:1rem;" >{{incidencia.responsables}}</a>
 								</div>
-								{% if isResponsable or request.user.is_staff %}
+								{% if isResponsable or request.user.is_staff or request.user.id == incidencia.autor.id %}
 								<div class="col-sm-6 col-lg-3">
 									<div class="form-group p-0 w-auto">                 
 										<div class="input-group">
@@ -135,9 +143,9 @@
                                     <p>Equipo</p>
                                 </div>
                                 <div class="col-sm-4 col-lg-2 mb-3">
-									<a href="{% url 'app:equipo_detalle' incidencia.equipo.id %} " style="font-size:1rem; font-weight:bold;">{{incidencia.equipo.nombre}}</a>
+									<a href="{% url 'app:equipo_detalle' incidencia.equipo.id %} " style="font-size:1rem;">{{incidencia.equipo.nombre}}</a>
 								</div>
-								{% if isResponsable or request.user.is_staff %}
+								{% if isResponsable or request.user.is_staff or request.user.id == incidencia.autor.id %}
 								<div class="col-sm-6 col-lg-3">
 									<div class="form-group p-0 w-auto">                 
 										<div class="input-group">
@@ -157,25 +165,31 @@
                                     <p>Última actualización</p>
                                 </div>
                                 <div class="col-md-8">
-                                    <p class="font-weight-bold" style="font-size:1rem; color: aliceblue;">{{incidencia.fechaModificacion}}</p>
+                                    <p  style="font-size:1rem; color: aliceblue;">{{incidencia.fechaModificacion}}</p>
                                 </div>
                             </div>
                             <div class="row mt-2">
                                 <div class="col-md-2">
                                     <p>Descripción</p>
                                 </div>
+								{% if isResponsable or request.user.is_staff or request.user.id == incidencia.autor.id %}
                                 <div class="col-md-8">
 									<div class="form-group form-floating-label  pl-md-0">
 										<textarea type="textarea" class="form-control" id="descripcion" name="descripcion" required rows="5">{{incidencia.descripcion}}</textarea>
 									</div>
                                 </div>
+								{% else %}
+								<div class="col-md-8">
+									<p style="font-size:1rem; color: aliceblue;">{{incidencia.descripcion}}</p>
+                                </div>
+								{% endif %}
                             </div>
                             <div class="row mt-2">
                                 <div class="col-md-2">
                                     <p>Grado</p>
                                 </div>
                                 <div class="col-md-8">
-									<p class="font-weight-bold" style="font-size:1rem; color: aliceblue;">{{incidencia.grado}} - {{incidencia.get_grado_display}}</p>
+									<p style="font-size:1rem; color: aliceblue;">{{incidencia.grado}} - {{incidencia.get_grado_display}}</p>
                                 </div>
 							</div>
 							<div class="row mt-2">
@@ -183,9 +197,9 @@
 									<p> Tipo</p>
 								</div>
 								<div class="col-sm-4 col-lg-2 pr-1">
-									<p  class="font-weight-bold" style="font-size:1rem; color: aliceblue;">{{incidencia.tipo|capfirst}} </p>
+									<p  style="font-size:1rem; color: aliceblue;">{{incidencia.tipo|capfirst}} </p>
 								</div>
-								{% if isResponsable or request.user.is_staff %}
+								{% if isResponsable or request.user.is_staff or request.user.id == incidencia.autor.id %}
 								<div class="col-sm-6 col-lg-3">
 									<div class="form-group p-0">                 
 										<div class="input-group">
@@ -206,7 +220,7 @@
 								<div class="col-md-2">
 									<p>Horas estimadas</p>
 								</div>
-								{% if isResponsable or request.user.is_staff %}
+								{% if isResponsable or request.user.is_staff or request.user.id == incidencia.autor.id %}
 								<div class="col-sm-6 col-lg-3">
 									<div class="form-group p-0">                 
 										<div class="input-group">
@@ -216,11 +230,11 @@
 								</div>
 								{% else %}
 								<div class="col-sm-4 col-lg-2 pr-1">
-									<p  class="font-weight-bold" style="font-size:1rem; color: aliceblue;">{{incidencia.horasEstimadas}} </p>
+									<p style="font-size:1rem; color: aliceblue;">{{incidencia.horasEstimadas}} </p>
 								</div>
 								{% endif %}
 							</div>
-							{% if isResponsable or request.user.is_staff %}
+							{% if isResponsable or request.user.is_staff  or request.user.id == incidencia.autor.id%}
 							<div class="row mt-5 mb-5">
 								<div class="col-12">
 									<button class="btn btn-success" type="submit">Actualizar datos</button>

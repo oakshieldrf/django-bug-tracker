@@ -1,0 +1,22 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Equipo eliminado {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="text-center">
+    <h2 style="margin-top:5rem;"> Has eliminado el equipo <span class="font-weight-bold">"{{nombreEquipo}}"</span>  exitosamente</h2>
+    <a href="{% url 'app:equipos_list' %}" class="mt-4" >Volver a Equipos</a>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script src="/static/assets/js/setting-demo2.js"></script>
+
+{% endblock javascripts %}

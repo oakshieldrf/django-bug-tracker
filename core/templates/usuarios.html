@@ -49,7 +49,7 @@
                                 </div>
                            </div>
                           
-                           {% if usuarios %}
+                           {% if lista_usuarios %}
                            <div class="col-sm-12">
                                 <table id="basic-datatables" class="display table table-striped table-responsive table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                     <thead>
@@ -62,7 +62,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {% for usuario in usuarios %}									
+                                    {% for usuario in lista_usuarios %}									
                                         <tr role="row" class="odd">
                                             <td class="sorting_1">{{usuario.username}}</td>
                                             <td>{{usuario.email}} </td>
@@ -91,6 +91,7 @@
                                                         <i class="far fa-eye" style="font-size:.8rem;"></i>
                                                     </a>
                                                 </div>
+                                                
                                                 {% if request.user.groups == "scrum master" %}
                                                 <div class="form-button-action pt-3">
                                                     <a href="#" type="button" data-toggle="tooltip" title="" class="btn  btn-danger btn-sm" data-original-title="Remover del equipo">
@@ -104,11 +105,14 @@
                                     </tbody>
                                 </table>
                            </div>
+                        <!-- PAGINACION -->
+		                    {% include 'includes/paginacion.html' with page=lista_usuarios %}
                            {% else %}
                             <div class="col-12">
-                                <h4 class="font-weight-bold" >Todavia no hay usuarios registrados</h4>
+                                <p class="font-weight-bold" >Todavia no hay usuarios registrados</p>
                             </div> 
                            {% endif %}
+
 						</div>
 					</div>
                 </div>

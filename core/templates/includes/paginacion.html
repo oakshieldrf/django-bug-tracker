@@ -1,0 +1,22 @@
+<div class="row mt-3">
+    <div class="col-sm-12 col-md-5">
+        <div class="dataTables_info" id="add-row_info" role="status" aria-live="polite"></div>
+    </div>
+    <div class="col-sm-12 col-md-7">
+        <div class="dataTables_paginate paging_simple_numbers" id="add-row_paginate">
+            <ul class="pagination">
+                {% if page.has_previous %}
+                    <li class="paginate_button page-item previous" id="add-row_previous">
+                        <a href="?page={{page.previous_page_number}}" aria-controls="add-row" data-dt-idx="0" tabindex="0" class="page-link">Anterior</a>
+                    </li>
+                {% endif %}
+                {% if page.has_other_pages %}
+                    <li class="paginate_button active page-item"><a href="" aria-controls="add-row" data-dt-idx="{{page.number}}" tabindex="0" class="page-link">{{page.number}}</a></li>
+                {% endif %}
+                {% if page.has_next %}
+                    <li class="paginate_button page-item next" id="add-row_next"><a href="?page={{page.next_page_number}}" aria-controls="add-row" data-dt-idx="4" tabindex="0" class="page-link">Siguiente</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>

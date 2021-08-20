@@ -11,6 +11,10 @@ from .models import Incidencia, Equipo
 from authentication.models import UserExtend
 from django.utils import timezone
 from django.contrib import messages
+from django.views.decorators.http import require_POST
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.urls import reverse
+
 
 
 
@@ -69,12 +73,28 @@ class IncidenciasView(View):
         listaIncidencias = Incidencia.objects.all()
         equipos = Equipo.objects.all()
         responsables = User.objects.all()
+        #Paginacion
+        paginator = Paginator(listaIncidencias, 10) # 10 incidencia por cada pagina
+        page = request.GET.get('page')
+
+        try:
+            incidencias = paginator.page(page)  
+        
+        except PageNotAnInteger:
+            #Si la pagina no es un entero mostrar la primer pagina
+            incidencias = paginator.page(1)
+        
+        except EmptyPage:
+            #Si la pagina esta fuera del rango mostrar a ultima pagina de resultados
+            incidencias = paginator,page(paginator.num_pages)
 
         context = {}
         context['segment'] = 'index'
-        context['lista_incidentes'] = listaIncidencias #Agrega lista de incidentes al contexto para mostrar en template
+        context['lista_incidentes'] = incidencias
         context['equipos'] = equipos
         context['responsables'] = responsables
+        context['page'] = page
+
 
         html_template = loader.get_template( 'incidencias.html')
         return HttpResponse(html_template.render(context, request))
@@ -166,7 +186,7 @@ class IncidenciaDetalleView(View):
 
 
 ##################################################
-########### Clase para lista de equipos ##########
+########### Clase para lista de EQUIPOS ##########
 ##################################################
 
 class EquiposView(View): 
@@ -174,14 +194,27 @@ class EquiposView(View):
     def get(self, request):
 
         equipos = Equipo.objects.all()
+        paginator = Paginator(equipos, 10)
+        page = request.GET.get('page')
+
+        try:
+            equiposPaginacion = paginator.page(page)
+        
+        except PageNotAnInteger:
+            equiposPaginacion = paginator.page(1)
+        
+        except EmptyPage:
+            equiposPaginacion = paginator.page(paginator.num_pages)
         
         context = {}
         context['segment'] = 'index'
-        context['lista_equipos'] = equipos
+        context['lista_equipos'] = equiposPaginacion #Segmentos de objetos Equipo para mostrar en su respectiva pagina
         context['miembros'] = User.objects.all().exclude(username='admin')
+        context['page'] = page
 
-        return render(request, 'equipos.html', context)
-        
+        html_template = loader.get_template( 'equipos.html')
+        return HttpResponse(html_template.render(context, request))
+
 
     def post(self, request):
 
@@ -219,7 +252,7 @@ class EquiposView(View):
 
 
 ###################################################
-########### Clase para detalle de equipo ##########
+########### Clase para detalle de EQUIPO ##########
 ################################################### 
 
 class EquipoDetailView(View):
@@ -229,14 +262,19 @@ class EquipoDetailView(View):
         equipo = Equipo.objects.get(pk=id)
         incidencias = Incidencia.objects.filter(equipo=equipo)
         miembros = equipo.miembros.all()
-        
+        es_manager = True if request.user.groups.all()[0].name == 'project-manager'  else False
+        usuarios = User.objects.exclude(id__in=[miembro.id for miembro in miembros]).exclude(is_staff=True)
+
         context = {}
         context['segment'] = 'index'
         context['equipo'] = equipo
         context['lista_incidentes'] = incidencias
         context['miembros'] = miembros
+        context['es_manager'] = es_manager
+        context['usuarios'] = usuarios
 
-        return render(request, 'equipo-detalle.html', context)
+        html_template = loader.get_template( 'equipo-detalle.html')
+        return HttpResponse(html_template.render(context, request))
         
 
     def post(self, request, id):
@@ -254,8 +292,47 @@ class EquipoDetailView(View):
 
         equipo.save()
 
+        messages.success(request, "Datos actualizados correctamente")
 
         return self.get(request,id)
+
+
+    #Eliminar equipo
+    @require_POST
+    def eliminarEquipo(request, id):
+
+        equipo = Equipo.objects.get(pk=id)
+        context = {}
+        context['nombreEquipo'] = equipo.nombre
+        equipo.delete() 
+
+        return render(request, 'equipo-eliminar.html', context)
+
+#Remover miembro del equipo
+    @require_POST
+    def añadirMiembro(request, id):
+        equipo = Equipo.objects.get(pk=id)
+        miembroId = request.POST['miembro-nuevo']
+        
+        miembro = User.objects.get(pk=miembroId)
+        equipo.miembros.add(miembro)
+        
+        messages.success(request, 'Miembro añadido exitosamente')
+
+        return redirect('app:equipo_detalle', id=id)
+
+
+#Añadir un miembro del equipo
+    @require_POST
+    def removerMiembro(request, id, idMiembro):
+        equipo = Equipo.objects.get(pk=id)
+        miembro = User.objects.get(pk=idMiembro)
+        equipo.miembros.remove(miembro)
+        
+        messages.success(request, 'Miembro removido exitosamente')
+
+        return redirect('app:equipo_detalle', id=id)
+
 
 
 ###################################################
@@ -265,15 +342,30 @@ class UsuariosView(View):
 
     def get(self, request):
 
+        lista_equipos = Equipo.objects.all()
+        lista_usuarios = User.objects.all().exclude(username='admin')
+        #Paginacion
+        paginator = Paginator(lista_usuarios, 10)
+        page = request.GET.get('page')
+
+        try:
+            lista_usuarios = paginator.page(page)
+        except PageNotAnInteger:
+            lista_usuarios = paginator.page(1)
+        except:
+            lista_usuarios = paginator.page(paginator.num_pages)
+
         context = {}
         context['segment'] = 'index'
-        context['lista_equipos'] =  Equipo.objects.all()
-        context['usuarios'] = User.objects.all().exclude(username='admin')
-
+        context['lista_equipos'] =  lista_equipos
+        context['lista_usuarios'] = lista_usuarios
+ 
         return render(request, 'usuarios.html', context)
 
     def post(self,request):
         pass 
+
+
 
 ###################################################
 ########### Clase para detalle usuario ############
@@ -290,6 +382,10 @@ class UsuarioDetailView(View):
         context['roles'] = roles[0] if roles else None
         context['equipos'] = Equipo.objects.filter(miembros__id = id)
         context['userextend'] = UserExtend.objects.get(user__id=id)
+        grupos = request.user.groups.all()
+        context['esmanager'] =  True if grupos[0].name == 'project-manager' else False
+
+        print(request.user.is_active)
 
         return render(request, 'usuario-detalle.html', context)
 
@@ -299,11 +395,29 @@ class UsuarioDetailView(View):
 
         dataUpdate = request.POST
 
-        usuario.first_name = dataUpdate['nombre']
-        usuario.last_name = dataUpdate['apellido']
-        usuario.email = dataUpdate['email']
+        if (not request.POST['estado']): #Evalua si el project manager hizo el request
+            usuario.first_name = dataUpdate['nombre']
+            usuario.last_name = dataUpdate['apellido']
+            usuario.email = dataUpdate['email']
+
+            messages.success(request, "Tus datos han sido actualizados exitosamente")
+
+        else:
+            usuario.is_active = dataUpdate['estado']
+            messages.success(request, "Los datos han sido actualizados exitosamente")
 
         usuario.save()
 
         return self.get(request,id)
 
+
+
+#################################################
+##############     UTILS   ######################
+def notificacionAccion(request):
+
+    context = {}
+    #context['mensajeTitulo'] = msgTitulo
+    #context['mensajeBody'] = msgBody
+
+    return render(request, "notificacion-accion.html", context )

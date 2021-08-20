@@ -61,6 +61,7 @@
 							</div>
 						</div>
 						<div class="card-body">
+						{% if incidencias %}
 							{% for incidencia in ultimasIncidencias %}
 							<div class="d-flex">
 								<label class="colorinput">
@@ -93,6 +94,9 @@
 							<div class="separator-dashed"></div>
 							{% endfor %}
 							<a href="{% url 'app:incidencias_list' %}" class="btn btn-secondary text-white mt-3">Ver incidencias</a hrf="{% url 'app:incidencias_list' %}">
+						{% else %}
+							<p class="text-center">Todavia no hay incidencias registradas</p>
+						{% endif %}
 						</div>
 					</div>
 				</div>

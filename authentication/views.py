@@ -26,11 +26,12 @@ def login_view(request):
             username = form.cleaned_data.get("username")
             password = form.cleaned_data.get("password")
             user = authenticate(username=username, password=password)
-            if user is not None:
+
+            if user is not None and user.is_active:
                 login(request, user)
                 return redirect("/")
             else:    
-                msg = 'Datos inválidos'    
+                msg = 'Los datos inválidos o tu cuenta esta deshabilitada'    
         else:
             msg = 'Error validando el formulario'    
 

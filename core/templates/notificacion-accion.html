@@ -1,0 +1,20 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} mensajeTitulo {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<h1 style="margin-top:5rem;"> mensajeBody </h1>
+<a href="{% url 'app:equipos_list' %} ">Volver a Equipos</a>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<script src="/static/assets/js/setting-demo2.js"></script>
+
+{% endblock javascripts %}

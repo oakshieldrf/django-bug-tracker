@@ -16,6 +16,9 @@ class Equipo(models.Model):
     miembros = models.ManyToManyField(User,  related_name="equipo_miembros")
     descripcion = models.TextField(max_length=200)
 
+    def get_absolute_url(self):
+        return reverse('app:equipo_detalle',args=[self.id])
+
     #Devuelve el nombre en lugar de object
     def __str__(self):
         return self.nombre
@@ -62,3 +65,7 @@ class Incidencia(models.Model):
 
     class Meta:
         ordering = ('-fechaCreacion',) #Ordenar en orden ascendente
+
+class Prueba(models.Model):
+
+    nombrePrueba = models.TextField(max_length=100)

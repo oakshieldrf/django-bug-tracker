@@ -21,7 +21,7 @@
                         <i class="flaticon-right-arrow"></i>
                     </li>
                     <li class="nav-item">
-                        <a href="#">Equipos</a>
+                        <a href="{% url 'app:equipos_list' %} ">Equipos</a>
 					</li>
                     <li class="separator">
                         <i class="flaticon-right-arrow"></i>
@@ -32,7 +32,7 @@
 					
 					{% if messages %}
 						{% for message in messages %}
-							<li class="text-{{message.tags}} ml-4" style="font-size:2rem!important; "><h5>{{message}}</h5></li>
+							<li class="{% if message.tags == 'error' %} text-danger {% else %} text-success {% endif %}  ml-4" style="font-size:2rem!important; "><h5>{{message}}</h5></li>
 						{% endfor %}
 					{% endif %}
                 </ul>
@@ -58,7 +58,7 @@
                                                     <div class=" col-sm-3 col-md-2">
                                                         <p>Nombre:</p>
                                                     </div>
-                                                    {% if request.user.is_staff %}
+                                                    {% if request.user.is_staff or es_manager %}
                                                     <div class="col-sm-9 col-lg-5">
                                                         <div class="form-group form-floating-label pt-0">
                                                             <input id="inputFloatingLabel" type="text" class="form-control input-border-bottom pt-0" style="font-size:1rem;" required name="nombre" id="nombre" value="{{equipo.nombre}}">
@@ -75,10 +75,16 @@
                                                     <div class=" col-sm-3 col-md-2">
                                                         <p>Descripción:</p>
                                                     </div>
-                                                    <div class="col-md-8">
+                                                    <div class="col-sm-11 col-md-8">
+                                                    {% if request.user.is_staff or es_manager %}
                                                         <div class="form-group form-floating-label  pl-md-0">
                                                             <textarea type="textarea" class="form-control" id="descripcion" name="descripcion" required rows="5" value="equipo.descripcion">{{equipo.descripcion|capfirst}}</textarea>
                                                         </div>
+                                                    {% else %}
+                                                        <div class="col-sm-11 col-md-8">
+                                                            <p style="font-size:1rem;" class="text-white">{{equipo.descripcion}}</p>
+                                                        </div>
+                                                    {% endif %}
                                                     </div>
                                                 </div>
                                                 <div class="row mt-3">
@@ -105,14 +111,21 @@
                                         </div>
                                     </div>
                                 </div>
-                                {% if request.user.is_staff %}
+                                {% if request.user.is_staff or es_manager %}
                                 <div class="row mt-5 mb-5">
-                                    <div class="col-12">
+                                    <div class="col-6 col-md-3">
                                         <button class="btn btn-success" type="submit">Actualizar datos</button>
                                     </div>
+                                </form>
+                                <form  action="{% url 'app:equipo_eliminar' equipo.id %}" method="post" id="eliminar-equipo">
+                                    {% csrf_token %}
+                                    <div class="col-6 col-md-3 ">
+                                        <button class="btn btn-danger" id="alert_eliminar" >Eliminar equipo</button>
+                                    </div>
+                                </form>
+
                                 </div>
                                 {% endif %}
-                            </form>	
                         </div>
                     </div>
                 </div>
@@ -166,12 +179,18 @@
                                                         <i class="far fa-eye" style="font-size:1rem;"></i>
                                                     </a>
                                                 </div>
-                                                {% if request.user.is_staff %}
-                                                <div class="form-button-action pt-3">
-                                                    <a href="#" type="button" data-toggle="tooltip" title="" class="btn  btn-danger btn-sm" data-original-title="Remover del equipo">
-                                                        <i class="fas fa-times" style="font-size:1rem;"></i>
-                                                    </a>
-                                                </div>
+
+                                                {% if request.user.is_staff or es_manager %}
+                                                <form id="remover-miembro" action="{% url 'app:equipo_del_miembro' id=equipo.id idMiembro=miembro.id %}" method="post">
+                                                   {% csrf_token %}
+                                                    <div class="form-button-action pt-3">
+                                                        <a  type="button" data-toggle="tooltip" title="" class="btn  btn-danger btn-sm" data-original-title="Remover del equipo" id="alert_del_miembro">
+                                                            <i class="fas fa-times" style="font-size:1rem;"></i>
+                                                        </a>
+                                                    </div>
+                                                    <div class="form-button-action pt-3">
+                                                    </div>
+                                                </form>
                                                 {% endif %}
                                             </td>
                                         </tr>
@@ -181,9 +200,35 @@
                         </div>
                         {% else %}
                             <div class="col-12">
-                                <h4 class="font-weight-bold" >Este equipo todavia no tiene miembros asignados</h4>
-                            </div> 
+                                <div class="mt-3 mb-5">
+                                    <h4 class="font-weight-bold" >Este equipo todavia no tiene miembros asignados</h4>
+                                </div>
+                            </div>
                         {% endif %}
+                        {% if request.user.is_staff or es_manager %}
+                            <form action="{% url 'app:equipo_add_miembro' equipo.id %}" method="POST" >
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-12 col-md-3">
+                                        <p class="font-weight-bold text-white" >Añadir miembros al equipo:</p>
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <div class="form-group p-0">                 
+                                            <div class="input-group">
+                                                <select class="form-control btn btn-primary dropdown-toggle" id="miembro-nuevo" name="miembro-nuevo">
+                                                {% for usuario in usuarios %}
+                                                    <option class="dropdown-item" value="{{usuario.id}}">{{usuario.username}} </option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-4">
+                                        <input type="submit" value="Añadir" class="btn btn-success" >
+                                    </div>
+                                </div>
+                            </form>
+                        {% endif %} 
                         </div>
                     </div>
                 </div>
@@ -220,5 +265,82 @@
 <!--<script src="/static/assets/js/setting-demo.js"></script> -->
 <!--<script src="/static/assets/js/demo.js"></script> -->
 <script src="/static/assets/js/setting-demo2.js"></script>
+<script>
+    //== Class definition
+    var SweetAlert2Demo = function() {
+
+        //== Demos
+        var initDemos = function() {
+            //== Sweetalert Demo 1
+            $('#alert_del_miembro').click(function(e) {
+                e.preventDefault();
+                var formDelMiembro = $('#remover-miembro');
+
+                swal({
+                    title: 'Estas a punto de remover el miembro del equipo',
+                    text: "No se puede revertir esta acción",
+                    type: 'warning',
+                    buttons:{
+                        confirm: {
+                            text : 'Remover',
+                            className : 'btn btn-success'
+                        },
+                        cancel: {
+                            visible: true,
+                            className: 'btn btn-danger'
+                        }
+                    }
+                }).then((Delete) => {
+                    if (Delete) {
+                        formDelMiembro.submit();
+                    } else {
+                        swal.close();
+                    }
+                });
+            });
+
+            $('#alert_eliminar').on("click", function(e) {
+                e.preventDefault();
+                var form = $('#eliminar-equipo');
+
+                swal({
+                    title: '¿Estas seguro de eliminar el equipo?',
+                    text: "No se pueden revertir los cambios",
+                    type: 'warning',
+                    buttons:{
+                        cancel: {
+                            visible: true,
+                            text : 'Cancelar',
+                            className: 'btn btn-danger'
+                        },        			
+                        confirm: {
+                            text : 'Eliminar',
+                            className : 'btn btn-success'
+                        }
+                    }
+                }).then((willDelete) => {
+                    if (willDelete) {
+                        form.submit();
+                    } 
+                });
+            })
+
+        };
+
+        return {
+            //== Init
+            init: function() {
+                initDemos();
+            },
+        };
+    }();
+
+    //== Class Initialization
+    jQuery(document).ready(function() {
+        SweetAlert2Demo.init();
+    });
+</script>
+
+
 
 {% endblock javascripts %}

@@ -32,7 +32,7 @@
 					
 					{% if messages %}
 						{% for message in messages %}
-							<li class="text-{{message.tags}} ml-4" style="font-size:2rem!important; "><h5>{{message}}</h5></li>
+							<li class="{% if message.tags == 'error' %} text-danger {% else %} text-success {% endif %}  ml-4" style="font-size:2rem!important; "><h5>{{message}}</h5></li>
 						{% endfor %}
 					{% endif %}
                 </ul>
@@ -114,7 +114,7 @@
                                                         {% endfor %}
                                                         </ul>
                                                         {% else %}
-                                                        <p  style="font-size:1rem; color: aliceblue;">NO ESTA ASIGNADO A UN EQUIPO TODAVIA</p>
+                                                        <p  style="font-size:1rem; color: aliceblue;">No esta asignado a un equipo todavia</p>
                                                         {% endif %}
                                                     </div>
                                                 </div>
@@ -122,7 +122,7 @@
                                                     <div class=" col-sm-12 col-md-6">
                                                         <p>Estado de la cuenta:</p>
 
-                                                        {% if request.user.is_staff %}
+                                                        {% if request.user.is_staff or esmanager %}
                                                         <div class="form-group p-0 w-auto">               
                                                             <div class="input-group">
                                                                 <p class="rounded p-1 mr-4 {% if usuario.is_active == True %} bg-success {% else %} bg-danger  {% endif %} " style="font-size:.8rem; color: aliceblue; width:max-content">
@@ -147,15 +147,19 @@
                                                 <div class="row mt-2">
                                                     <div class=" col-sm-12 col-md-6">
                                                         <p>Total de horas trabajadas en incidencias:</p>
-                                                        <p class="" style="font-size:1rem; color: aliceblue;">
-                                                            {{ userextend.horasTrabajo }} hrs.
+                                                        <p style="font-size:1rem; color: aliceblue;">
+                                                            {% if userextend.horasTrabajo >= 0 %} 
+                                                                {{ userextend.horasTrabajo }}hrs.
+                                                            {% else %}
+                                                                0hrs.
+                                                            {% endif %}
                                                         </p>
                                                     </div>
                                                 </div>
                                                 <div class="row mt-2">
                                                     <div class=" col-sm-12 col-md-6">
                                                         <p>Fecha de Registro:</p>
-                                                        <p class="" style="font-size:1rem; color: aliceblue;">
+                                                        <p style="font-size:1rem; color: aliceblue;">
                                                             {{ usuario.date_joined }}
                                                         </p>
                                                     </div>
@@ -163,7 +167,7 @@
                                                 <div class="row mt-2">
                                                     <div class=" col-sm-12 col-md-6">
                                                         <p>Última conexión:</p>
-                                                        <p class="" style="font-size:1rem; color: aliceblue;">
+                                                        <p style="font-size:1rem; color: aliceblue;">
                                                             {{ usuario.last_login }}
                                                         </p>
                                                     </div>
@@ -171,7 +175,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                {% if request.user.id == usuario.id or request.user.is_staff %}
+                                {% if request.user.id == usuario.id or request.user.is_staff or esmanager %}
                                 <div class="row mt-2 mb-5 pl-4">
                                     <div class="col-12">
                                         <button class="btn btn-success" type="submit">Actualizar datos</button>

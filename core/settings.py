@@ -4,19 +4,26 @@ import os
 from decouple import config
 from unipath import Path
 import dj_database_url
+import environ
+
+#Declaraciones para utilizar environ
+root = environ.Path(__file__) -3 #Obtiene directorio raiz del proyecto
+env = environ.Env()
+SITE_ROOT = root()
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).parent
 CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+environ.Env.read_env(env_file=os.path.join(BASE_DIR, '.env')) #Leyendo el archivo .env
 
-DEBUG = True
+DEBUG = env.bool('DEBUG', default=False)
 
 
-SECRET_KEY = '23sc4D$!"sXa(=0Pkg._Homl4m)BasTh4rdiz&d$eLm88aLrv26'
+SECRET_KEY = env.str('SECRET_KEY')
 
 # load production server from .env
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = tuple(env.list('ALLOWED_HOSTS', default=[]))
 
 
 # Application definition
@@ -71,8 +78,8 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 DATABASES = {
-    'default': dj_database_url.config(default=config('DATABASE_URL' ))
-    
+    'default': dj_database_url.config(default=config('DATABASE_URL' )),
+    'extra': env.db('SQLITE_URL', default='sqlite:////tmp/my-tmp-sqlite.db')  
 }
 
 
